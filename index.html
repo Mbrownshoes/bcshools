@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 12px "Helvetica Neue", Helvetica;
+}
+svg {
+    position: relative;
+    width: 880px;
+    height: 400px;
+}
+
+#chart {
+  font: 12px "Helvetica Neue", Helvetica;
+  
+}
+#chart_container {
+    position: absolute;
+
+ 
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x1axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.MMline {
+  fill: none;
+  stroke: #aaa;
+  stroke-width: 1.5px;
+}
+
+.xaxis .domain {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .3;
+  stroke-width: 10px;
+  stroke-linecap: round;
+}
+.x1axis .halo {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 8px;
+  stroke-linecap: round;
+}
+
+.g-slider .background {
+  cursor: ew-resize !important;
+}
+.g-slider .handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-width: 1.0px;
+  pointer-events: none;
+}
+#slider {
+    position: absolute;
+    top: 110px;
+    left: 500px;
+    font-size: 0.8em;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+ -->
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="main.css"> 
+
+ <h1>BC Schools Grade-to-Grade Transition</h1>
+<h2>Provincial Totals for both Public and Independent Schools</h2>
+ <!-- <p>Click on the map to see monthly values for that location</p>    -->
+
+
+<select id="station">
+    <option value = "ALL">All </option>
+    <option value = "FEM">Female </option>
+    <option value = "MAL">Male </option>
+    <option value = "AB">Aboriginal </option>
+    <option value = "XAB">Non Aboriginal </option>
+    <option value = "FRI">French Immersion </option>
+    <option value = "SN">Special Needs No Gifted </option>
+    <option value = "ELL">English Language Learner </option>
+</select>
+
+<div id="chart_container">
+    <div id="chart"></div>
+</div>
+
+<div id="slider"></div>
+
+<script>
+
+var parseDate = d3.time.format("%y %m").parse;
+var alldat
+
+
+var psv = d3.dsv("|", "text/plain")
+
+var sliderHeight = 30,
+    sliderWidth = 260;
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 860 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+
+
+
+
+psv("ProvG2G2012_2013.txt", function(data) {
+    data.forEach(function(d) {
+        d.Year = parseDate(d.Year.slice(0,2)+ " 06");
+    })
+
+    var current = {"month":1},
+    maxValue = 11,
+    moving;
+
+    var sliderContainer = d3.select("#slider").append("svg")
+          .attr("width", sliderWidth + margin.left + margin.right + 10)
+          .attr("height", sliderHeight + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top  + ")");
+
+    var x1 = d3.scale.linear() // scale for slider
+          .domain([1, 11])
+          .range([0, sliderWidth])
+          .clamp(true);
+
+    var brushToMonth = d3.scale.threshold()
+        .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+        .range([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+
+
+
+    var playButton = d3.select("#g-play-button");
+
+    var xTicks = {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "11": "11"
+    };
+    var xAxis1 = d3.svg.axis() // added this just to get the ticks to show up
+        .scale(x1)
+        .orient("bottom")
+        .ticks(12)
+        .tickFormat(function(d) { 
+                return xTicks[d]; })
+        .tickSize(10, 0)
+        .tickPadding(0);
+
+
+    var brush = d3.svg.brush()
+        .x(x1)
+        .extent([current.month, current.month])
+        .on("brush", brushed);
+
+    function brushed() {
+
+        var value = brush.extent()[0];
+
+        if (d3.event.sourceEvent) {
+
+            value = Math.round(x1.invert(d3.mouse(this)[0]));
+            brush.extent([value, value]);
+        }
+        handle.attr("cx", x1(value));
+        var brushDate = brushToMonth(value);
+        current.month = brushDate-1;
+        console.log(current.month)
+        station = $('#station').val();
+        console.log(station)
+        chartData = []
+        for (i = 0; i < alldat.length; i++) {
+
+            if (alldat[i].Grade == current.month && alldat[i].Group == station){
+                chartData.push({
+                    grade: alldat[i].Grade,
+                    date: alldat[i].Year,
+                    avg: Number(alldat[i].Perc)
+                })
+            }
+        }
+        updatechart(chartData)
+
+
+        // drawMap(brushDate, climate_var);
+
+    }
+  
+    var items = [];
+    alldat = data
+    // $.each(data, function(key, value){
+    // 	items.push(value)
+    //         // console.log(option)
+    //                 });
+    // console.log(items)
+    // // plot default selected
+
+    var chartData = []
+    for (i = 0; i < alldat.length; i++) {
+        if (alldat[i].Grade == "11" && alldat[i].Group == "ALL"){
+            chartData.push({
+                grade: alldat[i].Grade,
+            	date: alldat[i].Year,
+            	avg: Number(alldat[i].Perc)
+            })
+        }
+    }
+	
+
+ 
+
+
+    $(document).ready(function() {
+        $('#station').on('change', function(data) {
+            station = $('#station').val();
+            console.log(station)
+
+            chartData = []
+            for (i = 0; i < alldat.length; i++) {
+                if (alldat[i].Grade == "09" && alldat[i].Group == station){
+                    chartData.push({
+                        grade: alldat[i].Grade,
+                        date: alldat[i].Year,
+                        avg: Number(alldat[i].Perc)
+                    })
+                }
+            }
+
+            updatechart(chartData)
+
+        });
+    });
+
+    // Setup graph
+
+
+
+
+    var x = d3.time.scale()
+        .range([0, width]);
+
+    var y = d3.scale.linear()
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var line = d3.svg.line()
+        .x(function(d) { 
+            return x(d.date); })
+        .y(function(d) { return y(d.avg); });
+
+  
+    
+    // var zoom = d3.behavior.zoom()
+    //     .x(x)
+    //     .y(y)
+    //     .scaleExtent([1, 10])
+    //     .on("zoom", zoomed);	
+
+    var svg = d3.select("#chart").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    sliderContainer.append("g")
+      .attr("class", "x1axis")
+      .attr("transform", "translate(0," + sliderHeight / 2 + ")")
+      .call(d3.svg.axis()
+              .scale(x1)
+              .orient("bottom")
+              .ticks(12)
+              .tickFormat(function(d) { 
+                return xTicks[d]; })
+              .tickSize(0)
+              .tickPadding(12))
+              .select(".domain") // rest stylized the slider to hide ticks
+              .select(function() { 
+                return this.parentNode.appendChild(this.cloneNode(true)); 
+              })
+              .attr("class", "halo");
+
+    sliderContainer.call(xAxis1)
+         
+    var slider = sliderContainer.append("g")
+      .attr("class", "g-slider")
+      .call(brush);
+    slider.selectAll(".extent, .resize").remove();
+    slider.select(".background").attr("height", sliderHeight);
+
+    var handle = slider.append("circle")
+      .attr("class", "handle")
+      .attr("transform", "translate(0," + sliderHeight / 2 + ")")
+      .attr("r", 9);
+
+    makechart(chartData)
+
+    function makechart(data){
+
+    	x.domain(d3.extent(data, function(d) {
+         return d.date; }));
+    	y.domain([60, 100]);
+    	// y.domain(d3.extent(data, function(d) { return d.max; }));
+
+    	svg.append("g")
+    		.attr("class", "x axis")
+    		.attr("transform", "translate(0," + height + ")")
+    		.call(xAxis);
+
+    	svg.append("g")
+    		.attr("class", "y axis")
+    		.call(yAxis)
+    		.append("text")
+    		.attr("transform", "rotate(-90)")
+    		.attr("y", -46)
+    		.attr("dy", ".71em")
+    		.style("text-anchor", "end")
+    		.text("Transition Rate (%)");
+
+    	svg.append("path")
+    		.attr("class", "line")
+    		.attr("d", line(data));
+
+    	// svg.append("path")
+    	// 		.datum(data)
+    	// 		.attr("class", "MMline")
+    	// 		.attr("d", Maxline);
+
+    	// svg.append("path")
+    	// 	.datum(data)
+    	// 	.attr("class", "MMline")
+    	// 	.attr("d", Minline);
+
+    }
+
+
+    function updatechart(data){
+
+    	x.domain(d3.extent(data, function(d) {
+         return d.date; }));
+        y.domain([60, 100]);
+
+    	svg.select(".line")
+    	    .transition()
+    	    .duration(1000)
+    	    .attr("d", line(data));
+
+         //Update X axis
+    	    svg.select(".x.axis")
+    		    .transition()
+    	        .duration(1000)
+    	        .call(xAxis);
+
+    	    //y-axis transition
+    	    // svg.select(".y.axis")
+    	    //     .transition()
+    	    //     .duration(1000)
+    	    //     .call(yAxis);
+
+    }
+})
+
+
+
+</script>
+
