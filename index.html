@@ -76,11 +76,18 @@ svg {
 }
 #slider {
     position: absolute;
-    top: 110px;
+    top: 130px;
     left: 500px;
     font-size: 0.8em;
 }
-
+.g-summary {
+  line-height: 1.35em;
+  position: absolute;
+  top: -25px;
+  left: 550px;
+  width: 340px;
+  color: #333;
+}
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -118,6 +125,11 @@ svg {
 <div id="slider"></div>
 
 <script>
+
+d3.select("#chart")
+    .append("h3")
+    .html("Grade Transitioning From")
+    .attr("class","g-summary")
 
 var parseDate = d3.time.format("%y %m").parse;
 var alldat
@@ -208,6 +220,7 @@ psv("ProvG2G2012_2013.txt", function(data) {
         station = $('#station').val();
         console.log(station)
         chartData = []
+
         for (i = 0; i < alldat.length; i++) {
 
             if (alldat[i].Grade == current.month && alldat[i].Group == station){
