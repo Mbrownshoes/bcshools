@@ -106,8 +106,8 @@ svg {
 <h2>Provincial Totals for both Public and Independent Schools</h2>
  <!-- <p>Click on the map to see yearly values for that location</p>    -->
 
-
-<select id="station">
+<b>See how </b>
+<select id="group">
     <option value = "ALL">All </option>
     <option value = "FEM">Female </option>
     <option value = "MAL">Male </option>
@@ -117,6 +117,19 @@ svg {
     <option value = "SN">Special Needs No Gifted </option>
     <option value = "ELL">English Language Learner </option>
 </select>
+<b>students compare to </b>
+<select id="group2">
+    <option disabled selected>Select Group...</option>
+    <option value = "ALL">All </option>
+    <option value = "FEM">Female </option>
+    <option value = "MAL">Male </option>
+    <option value = "AB">Aboriginal </option>
+    <option value = "XAB">Non Aboriginal </option>
+    <option value = "FRI">French Immersion </option>
+    <option value = "SN">Special Needs No Gifted </option>
+    <option value = "ELL">English Language Learner </option>
+</select>
+<students.>
 
 <div id="chart_container">
     <div id="chart"></div>
@@ -154,8 +167,10 @@ psv("ProvG2G2012_2013.txt", function(data) {
     })
 
     var current = {"year":1},
-    maxValue = 1,
+    maxValue = 11,
     moving;
+
+
 
     var sliderContainer = d3.select("#slider").append("svg")
           .attr("width", sliderWidth + margin.left + margin.right + 10)
@@ -218,20 +233,21 @@ psv("ProvG2G2012_2013.txt", function(data) {
         var brushDate = brushToyear(value-1);
         console.log(brushDate)
         current.year = brushDate;
-        station = $('#station').val();
-        console.log(station)
-        chartData = []
+        group = $('#group').val();
+        console.log(group)
 
-        for (i = 0; i < alldat.length; i++) {
-            console.log('year: ' + current.year)
-            if (alldat[i].Grade == current.year && alldat[i].Group == station){
-                chartData.push({
-                    grade: alldat[i].Grade,
-                    date: alldat[i].Year,
-                    avg: Number(alldat[i].Perc)
-                })
-            }
-        }
+        chartData = gatherdata(alldat, current.year, group)
+
+        // for (i = 0; i < alldat.length; i++) {
+        //     console.log('year: ' + current.year)
+        //     if (alldat[i].Grade == current.year && alldat[i].Group == group){
+        //         chartData.push({
+        //             grade: alldat[i].Grade,
+        //             date: alldat[i].Year,
+        //             avg: Number(alldat[i].Perc)
+        //         })
+        //     }
+        // }
         updatechart(chartData)
 
 
@@ -248,36 +264,43 @@ psv("ProvG2G2012_2013.txt", function(data) {
     // console.log(items)
     // // plot default selected
 
-    var chartData = []
-    for (i = 0; i < alldat.length; i++) {
-        console.log('year: ' + current.year)
-        if (alldat[i].Grade == current.year  && alldat[i].Group == "ALL"){
-            chartData.push({
-                grade: alldat[i].Grade,
-            	date: alldat[i].Year,
-            	avg: Number(alldat[i].Perc)
-            })
+    function gatherdata(datain, yearIn, group) {
+        var chartData = []
+        for (i = 0; i < alldat.length; i++) {
+            console.log('year: ' + yearIn)
+            if (alldat[i].Grade == yearIn  && alldat[i].Group == group){
+                chartData.push({
+                    grade: alldat[i].Grade,
+                    date: alldat[i].Year,
+                    avg: Number(alldat[i].Perc)
+                })
+            }
         }
+        return chartData;
     }
+    group = $('#group').val();
+    chartData = gatherdata(alldat, current.year, group)
 	
 
 
     $(document).ready(function() {
-        $('#station').on('change', function(data) {
-            station = $('#station').val();
-            console.log(station)
+        $('#group').on('change', function(data) {
+            group = $('#group').val();
+            console.log(group)
 
-            chartData = []
-            for (i = 0; i < alldat.length; i++) {
-                console.log('update: '+ current.year )
-                if (alldat[i].Grade == current.year  && alldat[i].Group == station){
-                    chartData.push({
-                        grade: alldat[i].Grade,
-                        date: alldat[i].Year,
-                        avg: Number(alldat[i].Perc)
-                    })
-                }
-            }
+            // chartData = []
+            // for (i = 0; i < alldat.length; i++) {
+            //     console.log('update: '+ current.year )
+            //     if (alldat[i].Grade == current.year  && alldat[i].Group == group){
+            //         chartData.push({
+            //             grade: alldat[i].Grade,
+            //             date: alldat[i].Year,
+            //             avg: Number(alldat[i].Perc)
+            //         })
+            //     }
+            // }
+
+            chartData = gatherdata(alldat, current.year, group)
 
             updatechart(chartData)
 
