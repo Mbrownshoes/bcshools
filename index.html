@@ -360,7 +360,7 @@ psv("ProvG2G2012_2013.txt", function(data) {
 
     	x.domain(d3.extent(data, function(d) {
          return d.date; }));
-    	y.domain([60, 100]);
+    	y.domain([0, 100]);
     	// y.domain(d3.extent(data, function(d) { return d.max; }));
 
     	svg.append("g")
@@ -390,7 +390,7 @@ psv("ProvG2G2012_2013.txt", function(data) {
 
     	x.domain(d3.extent(data, function(d) {
          return d.date; }));
-        y.domain([60, 100]);
+        y.domain([0, 100]);
 
     	svg.select(".line")
     	    .transition()
