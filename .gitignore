@@ -1,5 +1,5 @@
-*.txt
 O3_hourly.csv
 .DS_Store
 build
 node_modules
+g2g_files
