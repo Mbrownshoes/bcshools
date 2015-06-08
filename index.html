@@ -104,7 +104,7 @@ svg {
 
  <h1>BC Schools Grade-to-Grade Transition</h1>
 <h2>Provincial Totals for both Public and Independent Schools</h2>
- <!-- <p>Click on the map to see monthly values for that location</p>    -->
+ <!-- <p>Click on the map to see yearly values for that location</p>    -->
 
 
 <select id="station">
@@ -153,8 +153,8 @@ psv("ProvG2G2012_2013.txt", function(data) {
         d.Year = parseDate(d.Year.slice(0,2)+ " 06");
     })
 
-    var current = {"month":1},
-    maxValue = 11,
+    var current = {"year":1},
+    maxValue = 1,
     moving;
 
     var sliderContainer = d3.select("#slider").append("svg")
@@ -168,7 +168,7 @@ psv("ProvG2G2012_2013.txt", function(data) {
           .range([0, sliderWidth])
           .clamp(true);
 
-    var brushToMonth = d3.scale.threshold()
+    var brushToyear = d3.scale.threshold()
         .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
         .range([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 
@@ -201,7 +201,7 @@ psv("ProvG2G2012_2013.txt", function(data) {
 
     var brush = d3.svg.brush()
         .x(x1)
-        .extent([current.month, current.month])
+        .extent([current.year, current.year])
         .on("brush", brushed);
 
     function brushed() {
@@ -215,15 +215,16 @@ psv("ProvG2G2012_2013.txt", function(data) {
             brush.extent([value, value]);
         }
         handle.attr("cx", x1(value));
-        var brushDate = brushToMonth(value-1);
+        var brushDate = brushToyear(value-1);
         console.log(brushDate)
-        current.month = brushDate;
+        current.year = brushDate;
         station = $('#station').val();
+        console.log(station)
         chartData = []
 
         for (i = 0; i < alldat.length; i++) {
-
-            if (alldat[i].Grade == current.month && alldat[i].Group == station){
+            console.log('year: ' + current.year)
+            if (alldat[i].Grade == current.year && alldat[i].Group == station){
                 chartData.push({
                     grade: alldat[i].Grade,
                     date: alldat[i].Year,
@@ -249,7 +250,8 @@ psv("ProvG2G2012_2013.txt", function(data) {
 
     var chartData = []
     for (i = 0; i < alldat.length; i++) {
-        if (alldat[i].Grade == "11" && alldat[i].Group == "ALL"){
+        console.log('year: ' + current.year)
+        if (alldat[i].Grade == current.year  && alldat[i].Group == "ALL"){
             chartData.push({
                 grade: alldat[i].Grade,
             	date: alldat[i].Year,
@@ -259,8 +261,6 @@ psv("ProvG2G2012_2013.txt", function(data) {
     }
 	
 
- 
-
 
     $(document).ready(function() {
         $('#station').on('change', function(data) {
@@ -269,7 +269,8 @@ psv("ProvG2G2012_2013.txt", function(data) {
 
             chartData = []
             for (i = 0; i < alldat.length; i++) {
-                if (alldat[i].Grade == "09" && alldat[i].Group == station){
+                console.log('update: '+ current.year )
+                if (alldat[i].Grade == current.year  && alldat[i].Group == station){
                     chartData.push({
                         grade: alldat[i].Grade,
                         date: alldat[i].Year,
@@ -355,6 +356,7 @@ psv("ProvG2G2012_2013.txt", function(data) {
     makechart(chartData)
 
     function makechart(data){
+        console.log('start: '+ current.year)
 
     	x.domain(d3.extent(data, function(d) {
          return d.date; }));
@@ -380,15 +382,6 @@ psv("ProvG2G2012_2013.txt", function(data) {
     		.attr("class", "line")
     		.attr("d", line(data));
 
-    	// svg.append("path")
-    	// 		.datum(data)
-    	// 		.attr("class", "MMline")
-    	// 		.attr("d", Maxline);
-
-    	// svg.append("path")
-    	// 	.datum(data)
-    	// 	.attr("class", "MMline")
-    	// 	.attr("d", Minline);
 
     }
 
