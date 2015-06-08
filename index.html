@@ -41,7 +41,14 @@ svg {
 
 .line {
   fill: none;
-  stroke: steelblue;
+  stroke: #1f77b4;
+  stroke-width: 1.5px;
+}
+
+
+.line2 {
+  fill: none;
+  stroke: #ff7f0e;
   stroke-width: 1.5px;
 }
 
@@ -76,18 +83,31 @@ svg {
 }
 #slider {
     position: absolute;
-    top: 380px;
-    left: 500px;
+    top: 560px;
+    left: 5px;
     font-size: 0.8em;
 }
 .g-summary {
   line-height: 1.35em;
   position: absolute;
-  top: 215px;
-  left: 550px;
+  top: 400px;
+  left: 50px;
   width: 340px;
   color: #333;
 }
+
+select{
+    color:#fff;
+    text-shadow:0 1px 0 rgba(0,0,0,0.4);
+}
+.com1 { 
+    background: #1f77b4;
+}
+.com2 { 
+    background: #ff7f0e;
+}
+
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -107,8 +127,8 @@ svg {
  <!-- <p>Click on the map to see yearly values for that location</p>    -->
 
 <b>See how </b>
-<select id="group">
-    <option value = "ALL">All </option>
+<select id="group" class="com1">
+    <option value = "ALL" >All </option>
     <option value = "FEM">Female </option>
     <option value = "MAL">Male </option>
     <option value = "AB">Aboriginal </option>
@@ -118,7 +138,7 @@ svg {
     <option value = "ELL">English Language Learner </option>
 </select>
 <b>students compare to </b>
-<select id="group2">
+<select id="group2" class="com2">
     <option disabled selected>Select Group...</option>
     <option value = "ALL">All </option>
     <option value = "FEM">Female </option>
@@ -129,6 +149,7 @@ svg {
     <option value = "SN">Special Needs No Gifted </option>
     <option value = "ELL">English Language Learner </option>
 </select>
+<b>students.</b>
 <students.>
 
 <div id="chart_container">
@@ -159,10 +180,8 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
 
 
 
-
-
-psv("ProvG2G2012_2013.txt", function(data) {
-    data.forEach(function(d) {
+psv("ProvG2G2012_2013.txt", function(alldat) {
+    alldat.forEach(function(d) {
         d.Year = parseDate(d.Year.slice(0,2)+ " 06");
     })
 
@@ -219,66 +238,9 @@ psv("ProvG2G2012_2013.txt", function(data) {
         .extent([current.year, current.year])
         .on("brush", brushed);
 
-    function brushed() {
 
-        var value = brush.extent()[0];
-
-        if (d3.event.sourceEvent) {
-
-            value = Math.round(x1.invert(d3.mouse(this)[0]));
-            console.log(value)
-            brush.extent([value, value]);
-        }
-        handle.attr("cx", x1(value));
-        var brushDate = brushToyear(value-1);
-        console.log(brushDate)
-        current.year = brushDate;
-        group = $('#group').val();
-        console.log(group)
-
-        chartData = gatherdata(alldat, current.year, group)
-
-        // for (i = 0; i < alldat.length; i++) {
-        //     console.log('year: ' + current.year)
-        //     if (alldat[i].Grade == current.year && alldat[i].Group == group){
-        //         chartData.push({
-        //             grade: alldat[i].Grade,
-        //             date: alldat[i].Year,
-        //             avg: Number(alldat[i].Perc)
-        //         })
-        //     }
-        // }
-        updatechart(chartData)
-
-
-        // drawMap(brushDate, climate_var);
-
-    }
-  
-    var items = [];
-    alldat = data
-    // $.each(data, function(key, value){
-    // 	items.push(value)
-    //         // console.log(option)
-    //                 });
-    // console.log(items)
-    // // plot default selected
-
-    function gatherdata(datain, yearIn, group) {
-        var chartData = []
-        for (i = 0; i < alldat.length; i++) {
-            console.log('year: ' + yearIn)
-            if (alldat[i].Grade == yearIn  && alldat[i].Group == group){
-                chartData.push({
-                    grade: alldat[i].Grade,
-                    date: alldat[i].Year,
-                    avg: Number(alldat[i].Perc)
-                })
-            }
-        }
-        return chartData;
-    }
     group = $('#group').val();
+
     chartData = gatherdata(alldat, current.year, group)
 	
 
@@ -287,29 +249,27 @@ psv("ProvG2G2012_2013.txt", function(data) {
         $('#group').on('change', function(data) {
             group = $('#group').val();
             console.log(group)
-
-            // chartData = []
-            // for (i = 0; i < alldat.length; i++) {
-            //     console.log('update: '+ current.year )
-            //     if (alldat[i].Grade == current.year  && alldat[i].Group == group){
-            //         chartData.push({
-            //             grade: alldat[i].Grade,
-            //             date: alldat[i].Year,
-            //             avg: Number(alldat[i].Perc)
-            //         })
-            //     }
-            // }
+            groupNo = 1
 
             chartData = gatherdata(alldat, current.year, group)
 
-            updatechart(chartData)
+            updatechart(chartData, groupNo)
 
         });
     });
 
-    // Setup graph
+    //Change second line
+    $(document).ready(function() {
+        $('#group2').on('change', function(data) {
+            group2 = $('#group2').val();
+            groupNo = 2
 
+            chartData = gatherdata(alldat, current.year, group2)
 
+            updatechart(chartData, groupNo)
+
+        });
+    });
 
 
     var x = d3.time.scale()
@@ -331,13 +291,6 @@ psv("ProvG2G2012_2013.txt", function(data) {
             return x(d.date); })
         .y(function(d) { return y(d.avg); });
 
-  
-    
-    // var zoom = d3.behavior.zoom()
-    //     .x(x)
-    //     .y(y)
-    //     .scaleExtent([1, 10])
-    //     .on("zoom", zoomed);	
 
     var svg = d3.select("#chart").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -383,7 +336,7 @@ psv("ProvG2G2012_2013.txt", function(data) {
 
     	x.domain(d3.extent(data, function(d) {
          return d.date; }));
-    	y.domain([0, 100]);
+    	y.domain([40, 100]);
     	// y.domain(d3.extent(data, function(d) { return d.max; }));
 
     	svg.append("g")
@@ -405,34 +358,79 @@ psv("ProvG2G2012_2013.txt", function(data) {
     		.attr("class", "line")
     		.attr("d", line(data));
 
-
+        svg.append("path")
+            .attr("class", "line2")
+            .attr("d", line([]));
     }
 
 
-    function updatechart(data){
+    function updatechart(data, groupNo){
 
     	x.domain(d3.extent(data, function(d) {
          return d.date; }));
-        y.domain([0, 100]);
+        y.domain([40, 100]);
 
-    	svg.select(".line")
-    	    .transition()
-    	    .duration(1000)
-    	    .attr("d", line(data));
+        console.log(groupNo)
+        if (groupNo == 1){
+            svg.select(".line")
+                .transition()
+                .duration(1000)
+                .attr("d", line(data));
+        } else {
+            svg.select(".line2")
+                .transition()
+                .duration(1000)
+                .attr("d", line(data));
+        }    	
 
          //Update X axis
-    	    svg.select(".x.axis")
-    		    .transition()
-    	        .duration(1000)
-    	        .call(xAxis);
-
-    	    //y-axis transition
-    	    // svg.select(".y.axis")
-    	    //     .transition()
+    	    // svg.select(".x.axis")
+    		   //  .transition()
     	    //     .duration(1000)
-    	    //     .call(yAxis);
+    	    //     .call(xAxis);
 
     }
+
+    function brushed() {
+
+        var value = brush.extent()[0];
+
+        if (d3.event.sourceEvent) {
+
+            value = Math.round(x1.invert(d3.mouse(this)[0]));
+            brush.extent([value, value]);
+        }
+        handle.attr("cx", x1(value));
+        
+        var brushDate = brushToyear(value-1);
+        current.year = brushDate;
+        group = $('#group').val();
+        group2 = $('#group2').val();
+        console.log(group)
+        console.log(group2)
+
+        chartData1 = gatherdata(alldat, current.year,group)
+        chartData2 = gatherdata(alldat, current.year, group2)
+        updatechart(chartData1, 1)
+        updatechart(chartData2, 2)
+
+    }
+  
+
+    function gatherdata(datain, yearIn, group) {
+        var chartData = []
+        for (i = 0; i < alldat.length; i++) {
+            if (alldat[i].Grade == yearIn  && alldat[i].Group == group){
+                chartData.push({
+                    grade: alldat[i].Grade,
+                    date: alldat[i].Year,
+                    avg: Number(alldat[i].Perc)
+                })
+            }
+        }
+        return chartData;
+    }
+
 })
 
 
