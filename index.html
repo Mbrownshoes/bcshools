@@ -76,14 +76,14 @@ svg {
 }
 #slider {
     position: absolute;
-    top: 130px;
+    top: 380px;
     left: 500px;
     font-size: 0.8em;
 }
 .g-summary {
   line-height: 1.35em;
   position: absolute;
-  top: -25px;
+  top: 215px;
   left: 550px;
   width: 340px;
   color: #333;
@@ -211,14 +211,14 @@ psv("ProvG2G2012_2013.txt", function(data) {
         if (d3.event.sourceEvent) {
 
             value = Math.round(x1.invert(d3.mouse(this)[0]));
+            console.log(value)
             brush.extent([value, value]);
         }
         handle.attr("cx", x1(value));
-        var brushDate = brushToMonth(value);
-        current.month = brushDate-1;
-        console.log(current.month)
+        var brushDate = brushToMonth(value-1);
+        console.log(brushDate)
+        current.month = brushDate;
         station = $('#station').val();
-        console.log(station)
         chartData = []
 
         for (i = 0; i < alldat.length; i++) {
