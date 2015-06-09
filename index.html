@@ -347,6 +347,14 @@ psv("ProvG2G2012_2013.txt", function(alldat) {
 
     makechart(chartData)
 
+    // slider.call(brush.event)
+    //     .call(brush.extent([5,5]));
+
+    slider.call(brush.event)
+        .transition()
+        .duration(1000)
+        .call(brush.extent([10,10]))
+        .call(brush.event);
 
 
     function makechart(data){
