@@ -107,7 +107,15 @@ select{
     background: #ff7f0e;
 }
 
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
 
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -178,7 +186,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
     width = 860 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
-
+var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
 psv("ProvG2G2012_2013.txt", function(alldat) {
     alldat.forEach(function(d) {
@@ -330,6 +338,37 @@ psv("ProvG2G2012_2013.txt", function(alldat) {
       .attr("r", 9);
 
     makechart(chartData)
+
+      // var focus = svg.append("g")
+      // .attr("class", "focus")
+      // .style("display", "none");
+
+      // focus.append("circle")
+      //     .attr("r", 4.5);
+
+      // focus.append("text")
+      //     .attr("x", 9)
+      //     .attr("dy", ".35em");
+
+      // svg.append("rect")
+      //     .attr("class", "overlay")
+      //     .attr("width", width)
+      //     .attr("height", height)
+      //     .on("mouseover", function() { focus.style("display", null); })
+      //     .on("mouseout", function() { focus.style("display", "none"); })
+      //     .on("mousemove", mousemove);
+
+      // function mousemove() {
+      //   var x0 = x.invert(d3.mouse(this)[0]),
+      //       i = bisectDate(chartData, x0, 1),
+      //       d0 = chartData[i - 1],
+      //       d1 = chartData[i],
+      //       d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+      //       console.log(d.avg)
+      //   focus.attr("transform", "translate(" + x(d.date) + "," + y(d.avg) + ")");
+      //   focus.select("text").text(d.avg);
+      // }
+
 
     function makechart(data){
         console.log('start: '+ current.year)
