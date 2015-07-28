@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 12px "Helvetica Neue", Helvetica;
+}
+svg {
+    position: relative;
+    width: 880px;
+    height: 400px;
+}
+
+#chart {
+  font: 12px "Helvetica Neue", Helvetica;
+  
+}
+#chart_container {
+    position: absolute;
+
+
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x1axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: #1f77b4;
+  stroke-width: 1.5px;
+}
+
+
+.line2 {
+  fill: none;
+  stroke: #ff7f0e;
+  stroke-width: 1.5px;
+}
+
+.MMline {
+  fill: none;
+  stroke: #aaa;
+  stroke-width: 1.5px;
+}
+
+.xaxis .domain {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .3;
+  stroke-width: 10px;
+  stroke-linecap: round;
+}
+.x1axis .halo {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 8px;
+  stroke-linecap: round;
+}
+
+.g-slider .background {
+  cursor: ew-resize !important;
+}
+.g-slider .handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-width: 1.0px;
+  pointer-events: none;
+}
+#slider {
+    position: absolute;
+    top: 420px;
+    left: 480px;
+    font-size: 1em;
+}
+.g-summary {
+  line-height: 1.35em;
+  position: absolute;
+  top: 320px;
+  left: 630px;
+  width: 340px;
+  color: #333;
+}
+
+select{
+    color:#fff;
+    text-shadow:0 1px 0 rgba(0,0,0,0.4);
+}
+.com1, .com2  { 
+    background: #1f77b4;
+}
+
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+</style>
+<body>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+-->
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="main.css"> 
+
+<h1>BC Schools Test Results - Science 10</h1>
+<!-- <h2>Provincial Totals for both Public and Independent Schools</h2> -->
+<!-- <p>Click on the map to see yearly values for that location</p>    -->
+
+
+<select id="group" class="com1">
+    <option value = "ALL" >All </option>
+    <option value = "FEM">Female </option>
+    <option value = "MAL">Male </option>
+</select>
+
+<select id="dist" class="com2">
+</select>
+
+
+<div id="chart_container">
+    <div id="chart"></div>
+</div>
+
+<div id="slider"></div>
+
+<script>
+
+// d3.select("#chart")
+//     .append("h3")
+//     .html("Grade")
+//     .attr("class", "g-summary")
+
+var parseDate = d3.time.format("%y %m").parse;
+var data
+
+
+var psv = d3.dsv("|", "text/plain")
+
+var sliderHeight = 30,
+    sliderWidth = 80;
+
+var margin = {
+        top: 20,
+        right: 20,
+        bottom: 30,
+        left: 50
+    },
+    width = 860 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+var bisectDate = d3.bisector(function(d) {
+    return d.date;
+}).left;
+
+var x = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+var test
+
+var data = {
+    resource_id: '4a45061d-c51d-43c5-9f16-1ff6c1ae400e', // the resource id
+    limit: 80000 // get 5 results
+    // q: 'Greater Victoria'
+};
+
+//http://cat.data.gov.bc.ca/dataset/bc-schools-examinations-results
+
+$.ajax({
+    url: 'http://cat.data.gov.bc.ca/api/action/datastore_search',
+    data: data,
+    dataType: 'jsonp',
+    success: function(data) {
+        data = data.result.records
+        data.forEach(function(d) {
+            test = d
+            d.Year = parseDate(d.year.slice(0, 2) + " 06");
+            // console.log(d.Year)
+        })
+
+        var current = {
+                "grade": 10
+            },
+            maxValue = 12,
+            moving;
+
+        var ordScale = d3.scale.ordinal()
+            .domain(data.map( function (d) { return d.district; }).sort());
+
+        var dis = ordScale.domain()
+        items = []
+        $.each(dis, function(key, value){
+            items.push(value)
+                var option = $('<option />').text(value);
+                
+                $("#dist").append(option);
+            });
+
+        var sliderContainer = d3.select("#slider").append("svg")
+            .attr("width", sliderWidth + margin.left + margin.right + 10)
+            .attr("height", sliderHeight + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var x1 = d3.scale.linear() // scale for slider
+            .domain([10, 12])
+            .range([0, sliderWidth])
+            .clamp(true);
+
+        var brushToyear = d3.scale.threshold()
+            .domain([10, 11, 12])
+            .range([10, 11, 12]);
+
+
+
+        var playButton = d3.select("#g-play-button");
+
+        var xTicks = {
+            "10": "10",
+            "11": "11",
+            "12": "12"
+        };
+        var xAxis1 = d3.svg.axis() // added this just to get the ticks to show up
+            .scale(x1)
+            .orient("bottom")
+            .ticks(2)
+            .tickFormat(function(d) {
+                return xTicks[d];
+            })
+            .tickSize(10, 0)
+            .tickPadding(0);
+
+
+        var brush = d3.svg.brush()
+            .x(x1)
+            .extent([current.grade, current.grade])
+            .on("brush", brushed);
+
+
+        group = $('#group').val();
+        dist = $('#dist').val();
+        console.log('group: ' + group)
+        console.log('grade: ' + current.grade)
+
+        chartData = gatherdata(data, dist, group)
+
+
+        $(document).ready(function() {
+            $('#group').on('change', function(data) {
+                group = $('#group').val();
+                dist = $('#dist').val();
+                console.log(dist)
+                groupNo = 1
+                console.log(data)
+                chartData = gatherdata(data, dist, group)
+
+
+                updatechart(chartData, groupNo)
+
+            });
+        });
+
+        //Change second line
+        $(document).ready(function() {
+            $('#dist').on('change', function(data) {
+                dist = $('#dist').val();
+                groupNo = 1
+
+                chartData = gatherdata(data, dist, group)
+
+                updatechart(chartData, groupNo)
+
+            });
+        });
+
+
+        var x = d3.time.scale()
+            .range([0, width]);
+
+        var y = d3.scale.linear()
+            .range([height, 0]);
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+
+        var line = d3.svg.line()
+            .x(function(d) {
+                return x(d.date);
+            })
+            .y(function(d) {
+                return y(d.avg);
+            });
+
+
+        var svg = d3.select("#chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+        // sliderContainer.append("g")
+        //     .attr("class", "x1axis")
+        //     .attr("transform", "translate(0," + sliderHeight / 2 + ")")
+        //     .call(d3.svg.axis()
+        //         .scale(x1)
+        //         .orient("bottom")
+        //         .ticks(12)
+        //         .tickFormat(function(d) {
+        //             return xTicks[d];
+        //         })
+        //         .tickSize(0)
+        //         .tickPadding(12))
+        //     .select(".domain") // rest stylized the slider to hide ticks
+        //     .select(function() {
+        //         return this.parentNode.appendChild(this.cloneNode(true));
+        //     })
+        //     .attr("class", "halo");
+
+        // sliderContainer.call(xAxis1)
+
+        // var slider = sliderContainer.append("g")
+        //     .attr("class", "g-slider")
+        //     .call(brush);
+        // slider.selectAll(".extent, .resize").remove();
+        // slider.select(".background").attr("height", sliderHeight);
+
+        // var handle = slider.append("circle")
+        //     .attr("class", "handle")
+        //     .attr("transform", "translate(0," + sliderHeight / 2 + ")")
+        //     .attr("r", 9);
+
+        makechart(chartData)
+
+
+
+        // slider.call(brush.event)
+        //     .transition()
+        //     .duration(1000)
+        //     .call(brush.extent([12, 12]))
+        //     .call(brush.event);
+
+
+        function makechart(data) {
+            console.log('start: ' + current.grade)
+
+            x.domain(d3.extent(data, function(d) {
+                return d.date;
+            }));
+            y.domain([40, 100]);
+            // y.domain(d3.extent(data, function(d) { return d.max; }));
+
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -46)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text("Final Mark (%)");
+
+            svg.append("path")
+                .attr("class", "line")
+                .attr("d", line(data));
+
+            svg.append("path")
+                .attr("class", "line2")
+                .attr("d", line([]));
+        }
+
+
+        function updatechart(data, groupNo) {
+            console.log(data)
+
+            x.domain(d3.extent(data, function(d) {
+                return d.date;
+            }));
+            y.domain([40, 100]);
+
+            if (groupNo == 1) {
+                svg.select(".line")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", line(data));
+            } else {
+                svg.select(".line2")
+                    .transition()
+                    .duration(1000)
+                    .attr("d", line(data));
+            }
+
+            //Update X axis
+            // svg.select(".x.axis")
+            //  .transition()
+            //     .duration(1000)
+            //     .call(xAxis);
+
+        }
+
+        function brushed() {
+
+            var value = brush.extent()[0];
+
+            if (d3.event.sourceEvent) {
+
+                value = Math.round(x1.invert(d3.mouse(this)[0]));
+                brush.extent([value, value]);
+            }
+            handle.attr("cx", x1(value));
+
+            var brushDate = brushToyear(value - 1);
+            current.grade = brushDate;
+            console.log(current.grade)
+            group = $('#group').val();
+            // dist = $('#dist').val();
+            console.log(current.grade)
+
+            chartData1 = gatherdata(data, current.grade, group)
+
+            // chartData2 = gatherdata(data, current.grade, dist)
+            updatechart(chartData1, 1)
+            // updatechart(chartData2, 2)
+
+        }
+
+
+        function gatherdata(datain, dist, group) {
+            
+            var chartData = []
+            for (i = 0; i < data.length; i++) {
+                if (data[i].district == dist && data[i].type == "FINAL_MARKS" && data[i].sub_pop == group && data[i].course == "Science 10") {
+                    // break;
+                    chartData.push({
+                        district: data[i].district,
+                        grade: data[i].grade,
+                        date: data[i].Year,
+                        avg: Number(data[i].avg_grd)
+                    })
+                }
+            }
+            return chartData;
+        }
+
+
+    }
+});
+
+
+
+
+
+</script>
+

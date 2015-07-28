@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<met charset="utf-8">
+
+<!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="main.css">
+<style>
+
+body {
+	margin-left: 112px;
+	margin-right: 112px;
+}
+
+.background {
+	fill: none;
+	pointer-events: all;
+}
+
+
+
+#provinces {
+	fill: #ddd;
+	cursor: pointer;
+}
+
+#provinces .active {
+	fill: orange;
+	fill-opacity: 0.6;
+}
+
+#prov-borders {
+	fill: none;
+	stroke: #fff;
+	stroke-linejoin: round;
+	pointer-events: none;
+}
+
+
+
+
+.g-summary {
+  font-size: 14px;
+  line-height: 1.35em;
+  position: absolute;
+  width: 340px;
+  color: #333;
+}
+
+.aboriginal {
+	fill: #006837;
+}
+
+
+
+.bubble {
+	fill: brown;
+	fill-opacity: .5;
+	stroke: #fff;
+	stroke-width: .1px;
+}
+
+.bubble :hover {
+	stroke: #000;
+}
+
+.legend_Pop circle {
+	fill: none;
+	stroke: #ccc;
+}
+
+.legend_Pop text {
+	fill: #777;
+	font: 10px sans-serif;
+	text-anchor: middle;
+}
+
+
+#byline {
+	padding-left: 20px;
+	margin-top: -20px;
+	font-size: 0.8em;
+}
+
+#intro {
+	padding-left: 20px;
+	font-size: 20px;
+}
+
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+</head>
+
+<h1>BC Schools Test Results</h1>
+<p id="intro">Click on the region you would like to look at.</p>
+<p class="map" id="map">
+
+</div>	
+<script>
+
+// d3.select("body")
+
+
+// d3.select(".map")
+// 	.append("h3")
+// 	.html("What is it?")
+// 	.append("p")
+// 	.html("Energy East is a proposed pipeline that would transport crude oil from the Alberta oil sands to refineries and ports in Eastern Canada.")
+// 	.attr("class","g-summary")
+
+var width = 900,
+	height = 700,
+	active = d3.select(null);
+
+var formatNumber = d3.format(",.0f");
+
+
+var path = d3.geo.path()
+	.projection(null);
+
+var zoom = d3.behavior.zoom()
+	.translate([0, 0])
+	.scale(1)
+	.scaleExtent([1, 8])
+	.on("zoom", zoomed);
+
+var svg = d3.select(".map")
+	.append("svg")
+	.attr("width", width)
+	.attr("height", height)
+	.on("click", stopped, true);
+
+var radius = d3.scale.sqrt()
+				.domain([0, 1e6])
+				.range([0,4]);
+
+var tooltip = d3.select(".map")
+				.append("div")
+				.attr("class", "tooltip");
+
+
+svg.append("rect")
+	.attr("class", "background")
+	.attr("width", width)
+	.attr("height", height)
+	.on("click", reset);
+
+var g = svg.append("g")
+
+svg
+	.call(zoom)
+	.call(zoom.event)
+
+
+
+d3.json("census.json", function(error, BC) {
+	if (error) return console.error(error);
+
+
+	g.append("g")
+		.attr("id", "provinces")
+		.selectAll("path")
+		.data(topojson.feature(BC, BC.objects.subunits).features)
+		.enter()
+		.append("path")
+		.attr("d", path)
+		.on("click", clicked);
+		// .attr("class", "border border--prov")
+
+	// g.append("path")
+	// 	.datum(topojson.mesh(canada, canada.objects.prov, function(a, b) {
+	// 		return a !== b;
+	// 	}))
+	// 	.attr("id", "prov-borders")
+	// 	.attr("d", path);
+
+
+
+
+
+
+var data = ["Gas pipeline (to be converted for oil)", "New pipeline (to be built)", "Aboriginal lands"]
+var color = ["steelblue", "hotpink","#006837"]
+
+
+
+
+});
+
+function clicked(d) {
+	g.selectAll([".bubble", ".aboriginal", ".legend_Pop"]).remove();
+	d3.select("h3").style("visibility","hidden")
+
+	console.log(d.properties.province)
+	prov_name = d.properties.province;
+
+  if (active.node() === this) return reset();
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
+
+
+	var bounds = path.bounds(d),
+	  dx = bounds[1][0] - bounds[0][0],
+	  dy = bounds[1][1] - bounds[0][1],
+	  x = (bounds[0][0] + bounds[1][0]) / 2,
+	  y = (bounds[0][1] + bounds[1][1]) / 2,
+	  scale = .9 / Math.max(dx / width, dy / height),
+	  translate = [width / 2 - scale * x, height / 2 - scale * y];
+	  
+
+	svg.transition()
+		.duration(750)
+		.call(zoom.translate(translate).scale(scale).event);
+	 
+
+	var tooltip = d3.select(".map")
+		.append("div")
+		.style("position", "absolute")
+		.style("z-index", "10")
+		.style("visibility", "hidden")
+		.style("color", "#222")
+		.style("padding", "8px")
+		.style("background-color", "#fff")
+		.style("border-radius", "6px")
+		.style("font", "12 px sans-serif")
+		.text("tooltip");
+
+// 	d3.json("cities.json", function(error, cities) {
+// 		if (error) return console.error(error);
+// 		g.append("g")
+// 			.attr("class", "bubble")
+//             .selectAll("circle")
+//             .data(topojson.feature(cities, cities.objects.cities).features.filter(function(d) { return prov_name == d.properties.province; }))
+//             .enter()
+//             .append("circle")
+// 		.attr("transform", function(d) {
+// 			return "translate(" + path.centroid(d) + ")";
+// 		})
+// 		.attr("r", function(d) {
+// 			return radius(d.properties.POP_MAX);
+// 		})
+// 		.on("mouseover", function(d) {
+// 			tooltip.text(d.properties.name
+// 		 	+ ":\nPopulation " + formatNumber(d.properties.POP_MAX));
+// 		 	tooltip.style("visibility", "visible");
+// 		})
+// 		.on("mousemove", function(){
+// 			return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+// 		})
+// 		.on("mouseout", function(){ return tooltip.style("visibility", "hidden");});
+
+
+
+// })
+
+};
+
+function reset() {
+  active.classed("active", false);
+  active = d3.select(null);
+
+  svg.transition()
+      .duration(750)
+      .call(zoom.translate([0, 0]).scale(1).event);
+
+  d3.select("h3")
+  .transition()
+  .delay(750)
+  .style("visibility","visible");
+}
+
+function zoomed() {
+  g.style("stroke-width", 1.5 / d3.event.scale + "px");
+  g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
+// If the drag behavior prevents the default click,
+// also stop propagation so we don’t click-to-zoom.
+function stopped() {
+  if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
+
+</script>
+
+<!-- </div> -->
+<!-- </div>
+</div> -->
