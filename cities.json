@@ -1,0 +1,2289 @@
+{
+type: "Topology",
+objects: {
+cities: {
+type: "GeometryCollection",
+geometries: [
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 9729,
+name: "Steinbach"
+},
+coordinates: [
+4227,
+8601
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 2500,
+name: "Nelson House"
+},
+coordinates: [
+3952,
+7162
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 870,
+name: "Shamattawa"
+},
+coordinates: [
+4740,
+7121
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 184,
+name: "Oxford House"
+},
+coordinates: [
+4376,
+7352
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 15172,
+name: "Yorkton"
+},
+coordinates: [
+3475,
+8196
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 14906,
+name: "Swift Current"
+},
+coordinates: [
+2770,
+8337
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 2192,
+name: "Biggar"
+},
+coordinates: [
+2788,
+7933
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 4383,
+name: "Kindersley"
+},
+coordinates: [
+2626,
+8043
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 5882,
+name: "Meadow Lake"
+},
+coordinates: [
+2789,
+7452
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 2157,
+name: "Hudson Bay"
+},
+coordinates: [
+3505,
+7823
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 70617,
+name: "Lethbridge"
+},
+coordinates: [
+2089,
+8351
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 14163,
+name: "Brooks"
+},
+coordinates: [
+2243,
+8182
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 1248,
+name: "Lake Louise"
+},
+coordinates: [
+1736,
+7861
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 2539,
+name: "Athabasca"
+},
+coordinates: [
+2235,
+7212
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 3222,
+name: "Fort Chipewyan"
+},
+coordinates: [
+2626,
+6352
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 1400,
+name: "Bella Bella"
+},
+coordinates: [
+335,
+7187
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 538,
+name: "Sandspit"
+},
+coordinates: [
+0,
+6751
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 33430,
+name: "Campbell River"
+},
+coordinates: [
+522,
+7790
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 2295,
+name: "Port Hardy"
+},
+coordinates: [
+298,
+7523
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 84905,
+name: "Nanaimo"
+},
+coordinates: [
+626,
+8043
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 13788,
+name: "Quesnel"
+},
+coordinates: [
+1058,
+7279
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 151683,
+name: "Abbotsford"
+},
+coordinates: [
+829,
+8142
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 10802,
+name: "Dawson Creek"
+},
+coordinates: [
+1488,
+6758
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 37721,
+name: "Penticton"
+},
+coordinates: [
+1204,
+8162
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 11779,
+name: "Nelson"
+},
+coordinates: [
+1500,
+8255
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 2893,
+name: "Lillooet"
+},
+coordinates: [
+978,
+7804
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 12779,
+name: "Powell River"
+},
+coordinates: [
+599,
+7854
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 7668,
+name: "Revelstoke"
+},
+coordinates: [
+1464,
+7887
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 2635,
+name: "Burns Lake"
+},
+coordinates: [
+762,
+6864
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 303,
+name: "Dease Lake"
+},
+coordinates: [
+639,
+5753
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 834,
+name: "Coral Harbour"
+},
+coordinates: [
+5435,
+5058
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1584,
+name: "Baker Lake"
+},
+coordinates: [
+4236,
+5164
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 1027,
+name: "Norman Wells"
+},
+coordinates: [
+1492,
+4398
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 1069,
+name: "Fort McPherson"
+},
+coordinates: [
+1049,
+3587
+]
+},
+{
+type: "Point",
+properties: {
+province: "Yukon",
+POP_MAX: 73,
+name: "Burwash Landing"
+},
+coordinates: [
+73,
+4671
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 32640,
+name: "Orangeville"
+},
+coordinates: [
+6687,
+9540
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 1595,
+name: "Little Current"
+},
+coordinates: [
+6332,
+9149
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 2663,
+name: "Chapleau"
+},
+coordinates: [
+6054,
+8776
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 2174,
+name: "Wawa"
+},
+coordinates: [
+5861,
+8776
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 5043,
+name: "Hearst"
+},
+coordinates: [
+5947,
+8365
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 4627,
+name: "Marathon"
+},
+coordinates: [
+5622,
+8646
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 4570,
+name: "Sioux Lookout"
+},
+coordinates: [
+4850,
+8397
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 1765,
+name: "Red Lake"
+},
+coordinates: [
+4590,
+8240
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 3743,
+name: "Deer Lake"
+},
+coordinates: [
+4543,
+7880
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 277,
+name: "Cat Lake"
+},
+coordinates: [
+4842,
+8064
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 48821,
+name: "Cornwall"
+},
+coordinates: [
+7386,
+9068
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 114195,
+name: "Kingston"
+},
+coordinates: [
+7187,
+9321
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 182041,
+name: "Barrie"
+},
+coordinates: [
+6720,
+9422
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 7105,
+name: "Parry Sound"
+},
+coordinates: [
+6627,
+9223
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 2182,
+name: "Wiarton"
+},
+coordinates: [
+6499,
+9397
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 1372,
+name: "Cobalt"
+},
+coordinates: [
+6577,
+8755
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 4441,
+name: "Cochrane"
+},
+coordinates: [
+6321,
+8427
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 1204,
+name: "Nipigon"
+},
+coordinates: [
+5363,
+8625
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 3625,
+name: "Atikokan"
+},
+coordinates: [
+4915,
+8738
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 35584,
+name: "Rimouski"
+},
+coordinates: [
+7977,
+8008
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 26149,
+name: "Saint-Georges"
+},
+coordinates: [
+7868,
+8621
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 41500,
+name: "Victoriaville"
+},
+coordinates: [
+7698,
+8705
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 284,
+name: "Chevery"
+},
+coordinates: [
+8876,
+7024
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 2645,
+name: "Mistassini"
+},
+coordinates: [
+7165,
+7853
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 549,
+name: "Kangirsuk"
+},
+coordinates: [
+6936,
+5595
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 49161,
+name: "Shawinigan"
+},
+coordinates: [
+7562,
+8637
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 1966,
+name: "Matagami"
+},
+coordinates: [
+6727,
+8155
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 11642,
+name: "Mont-Laurier"
+},
+coordinates: [
+7189,
+8769
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 15551,
+name: "Pembroke"
+},
+coordinates: [
+7008,
+8993
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 270,
+name: "Radisson"
+},
+coordinates: [
+6513,
+7264
+]
+},
+{
+type: "Point",
+properties: {
+province: "New Brunswick",
+POP_MAX: 87857,
+name: "Saint John"
+},
+coordinates: [
+8545,
+8527
+]
+},
+{
+type: "Point",
+properties: {
+province: "New Brunswick",
+POP_MAX: 17894,
+name: "Edmundston"
+},
+coordinates: [
+8081,
+8221
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nova Scotia",
+POP_MAX: 3167,
+name: "Shelburne"
+},
+coordinates: [
+8773,
+8791
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nova Scotia",
+POP_MAX: 6739,
+name: "Antigonish"
+},
+coordinates: [
+9047,
+8175
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nova Scotia",
+POP_MAX: 3864,
+name: "Windsor"
+},
+coordinates: [
+8827,
+8457
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nova Scotia",
+POP_MAX: 3949,
+name: "Digby"
+},
+coordinates: [
+8641,
+8642
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 7054,
+name: "Stephenville"
+},
+coordinates: [
+9189,
+7336
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 1063,
+name: "Argentia"
+},
+coordinates: [
+9862,
+7221
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 224,
+name: "St. Anthony"
+},
+coordinates: [
+9234,
+6557
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 4220,
+name: "Channel-Port aux Basques"
+},
+coordinates: [
+9217,
+7575
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 685,
+name: "Buchans"
+},
+coordinates: [
+9362,
+7155
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 452,
+name: "Trout River"
+},
+coordinates: [
+9148,
+7117
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 100,
+name: "Churchill Falls"
+},
+coordinates: [
+8097,
+6681
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 448,
+name: "Forteau"
+},
+coordinates: [
+9078,
+6643
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 398,
+name: "Trepassey"
+},
+coordinates: [
+9999,
+7276
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 278,
+name: "Brochet"
+},
+coordinates: [
+3643,
+6670
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 482,
+name: "Lynn Lake"
+},
+coordinates: [
+3703,
+6912
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 1281,
+name: "Gillam"
+},
+coordinates: [
+4431,
+7026
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 19440,
+name: "North Battleford"
+},
+coordinates: [
+2770,
+7765
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 34609,
+name: "Prince Albert"
+},
+coordinates: [
+3093,
+7707
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 32793,
+name: "Courtenay"
+},
+coordinates: [
+529,
+7875
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 125109,
+name: "Kelowna"
+},
+coordinates: [
+1240,
+8078
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1320,
+name: "Pangnirtung"
+},
+coordinates: [
+6820,
+4078
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 500,
+name: "Holman"
+},
+coordinates: [
+2583,
+3382
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 7862,
+name: "Dryden"
+},
+coordinates: [
+4737,
+8516
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 1802,
+name: "Attawapiskat"
+},
+coordinates: [
+5976,
+7609
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 721053,
+name: "Hamilton"
+},
+coordinates: [
+6756,
+9679
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 319246,
+name: "Windsor"
+},
+coordinates: [
+6322,
+9999
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 119693,
+name: "Trois-Rivipres"
+},
+coordinates: [
+7600,
+8671
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 25686,
+name: "Sept-ales"
+},
+coordinates: [
+8094,
+7488
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 20791,
+name: "Corner Brook"
+},
+coordinates: [
+9224,
+7209
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 6000,
+name: "Norway House"
+},
+coordinates: [
+4071,
+7584
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 6393,
+name: "Flin Flon"
+},
+coordinates: [
+3587,
+7387
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 9077,
+name: "Dauphin"
+},
+coordinates: [
+3786,
+8225
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 6055,
+name: "The Pas"
+},
+coordinates: [
+3656,
+7609
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 89,
+name: "Uranium City"
+},
+coordinates: [
+2923,
+6203
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 32166,
+name: "Moose Jaw"
+},
+coordinates: [
+3062,
+8347
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 3907,
+name: "Jasper"
+},
+coordinates: [
+1577,
+7474
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 63138,
+name: "Medicine Hat"
+},
+coordinates: [
+2382,
+8332
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 74857,
+name: "Red Deer"
+},
+coordinates: [
+2070,
+7748
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 7502,
+name: "Banff"
+},
+coordinates: [
+1801,
+7938
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 41462,
+name: "Grand Prairie"
+},
+coordinates: [
+1616,
+6942
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 6245,
+name: "Smithers"
+},
+coordinates: [
+646,
+6679
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 68714,
+name: "Kamloops"
+},
+coordinates: [
+1177,
+7876
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 14168,
+name: "Williams Lake"
+},
+coordinates: [
+1042,
+7482
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 65558,
+name: "Prince George"
+},
+coordinates: [
+1085,
+7064
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 6315,
+name: "Fort Nelson"
+},
+coordinates: [
+1430,
+5998
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1549,
+name: "Pond Inlet"
+},
+coordinates: [
+5422,
+2895
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1326,
+name: "Cape Dorset"
+},
+coordinates: [
+6032,
+4860
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 385,
+name: "Kimmirut"
+},
+coordinates: [
+6734,
+4968
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1109,
+name: "Gjoa Haven"
+},
+coordinates: [
+4220,
+4114
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 23,
+name: "Grise Fiord"
+},
+coordinates: [
+4914,
+2002
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 125,
+name: "Alert"
+},
+coordinates: [
+5333,
+0
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 0,
+name: "Ennadai"
+},
+coordinates: [
+3756,
+5916
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 2472,
+name: "Rankin Inlet"
+},
+coordinates: [
+4627,
+5500
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 448,
+name: "Fort Resolution"
+},
+coordinates: [
+2459,
+5734
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 283,
+name: "Fort Simpson"
+},
+coordinates: [
+1745,
+5363
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 3022,
+name: "Inuvik"
+},
+coordinates: [
+1224,
+3449
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 929,
+name: "Tuktoyaktuk"
+},
+coordinates: [
+1380,
+3228
+]
+},
+{
+type: "Point",
+properties: {
+province: "Yukon",
+POP_MAX: 802,
+name: "Watson Lake"
+},
+coordinates: [
+899,
+5454
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 120,
+name: "Lansdowne House"
+},
+coordinates: [
+5326,
+7893
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 1725,
+name: "Moosonee"
+},
+coordinates: [
+6267,
+7922
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 157857,
+name: "Sudbury"
+},
+coordinates: [
+6443,
+8997
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 10852,
+name: "Kenora"
+},
+coordinates: [
+4520,
+8533
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 3677,
+name: "Gaspe"
+},
+coordinates: [
+8446,
+7683
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 588,
+name: "Mingan"
+},
+coordinates: [
+8376,
+7350
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 13337,
+name: "Dolbeau"
+},
+coordinates: [
+7473,
+8112
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 20625,
+name: "Val d'Or"
+},
+coordinates: [
+6797,
+8521
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 156,
+name: "Ivugivik"
+},
+coordinates: [
+6014,
+5334
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 1597,
+name: "Inukjuak"
+},
+coordinates: [
+6203,
+6236
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 53940,
+name: "Chicoutimi"
+},
+coordinates: [
+7652,
+8146
+]
+},
+{
+type: "Point",
+properties: {
+province: "New Brunswick",
+POP_MAX: 90635,
+name: "Moncton"
+},
+coordinates: [
+8649,
+8272
+]
+},
+{
+type: "Point",
+properties: {
+province: "New Brunswick",
+POP_MAX: 52337,
+name: "Fredericton"
+},
+coordinates: [
+8416,
+8420
+]
+},
+{
+type: "Point",
+properties: {
+province: "New Brunswick",
+POP_MAX: 6111,
+name: "Bathurst"
+},
+coordinates: [
+8407,
+8013
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nova Scotia",
+POP_MAX: 7500,
+name: "Yarmouth"
+},
+coordinates: [
+8659,
+8831
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 3345,
+name: "Gander"
+},
+coordinates: [
+9616,
+6948
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 505,
+name: "Cartwright"
+},
+coordinates: [
+8836,
+6203
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 124,
+name: "Rigolet"
+},
+coordinates: [
+8635,
+6205
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 2762,
+name: "Port Burwell"
+},
+coordinates: [
+7426,
+5306
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 13727,
+name: "Thompson"
+},
+coordinates: [
+4066,
+7174
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 28418,
+name: "Brandon"
+},
+coordinates: [
+3792,
+8527
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 518,
+name: "Fort Smith"
+},
+coordinates: [
+2595,
+6042
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 21863,
+name: "Fort McMurray"
+},
+coordinates: [
+2529,
+6800
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 5340,
+name: "Peace River"
+},
+coordinates: [
+1844,
+6755
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 18776,
+name: "Fort St. John"
+},
+coordinates: [
+1450,
+6629
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 6124,
+name: "Iqaluit"
+},
+coordinates: [
+6788,
+4715
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1477,
+name: "Cambridge Bay"
+},
+coordinates: [
+3490,
+3968
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1302,
+name: "Kugluktuk"
+},
+coordinates: [
+2630,
+4147
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 374,
+name: "Chesterfield Inlet"
+},
+coordinates: [
+4752,
+5363
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1868,
+name: "Arviat"
+},
+coordinates: [
+4454,
+5916
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 774,
+name: "Taloyoak"
+},
+coordinates: [
+4402,
+3882
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1612,
+name: "Igloolik"
+},
+coordinates: [
+5329,
+3813
+]
+},
+{
+type: "Point",
+properties: {
+province: "Yukon",
+POP_MAX: 1319,
+name: "Dawson City"
+},
+coordinates: [
+333,
+4094
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 34974,
+name: "Timmins"
+},
+coordinates: [
+6306,
+8571
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 50170,
+name: "North Bay"
+},
+coordinates: [
+6662,
+8987
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 1243,
+name: "Kuujjuarapik"
+},
+coordinates: [
+6415,
+6936
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 1273,
+name: "Kuujjuaq"
+},
+coordinates: [
+7244,
+5943
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nova Scotia",
+POP_MAX: 37538,
+name: "Sydney"
+},
+coordinates: [
+9237,
+7953
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 10313,
+name: "Labrador City"
+},
+coordinates: [
+7815,
+6968
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 632063,
+name: "Winnipeg"
+},
+coordinates: [
+4161,
+8518
+]
+},
+{
+type: "Point",
+properties: {
+province: "Manitoba",
+POP_MAX: 1000,
+name: "Churchill"
+},
+coordinates: [
+4468,
+6464
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 176183,
+name: "Regina"
+},
+coordinates: [
+3184,
+8348
+]
+},
+{
+type: "Point",
+properties: {
+province: "Saskatchewan",
+POP_MAX: 198958,
+name: "Saskatoon"
+},
+coordinates: [
+2956,
+7928
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 1110000,
+name: "Calgary"
+},
+coordinates: [
+1985,
+8005
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 14708,
+name: "Prince Rupert"
+},
+coordinates: [
+260,
+6611
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 289625,
+name: "Victoria"
+},
+coordinates: [
+653,
+8226
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 604,
+name: "Arctic Bay"
+},
+coordinates: [
+4923,
+2922
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 250,
+name: "Resolute"
+},
+coordinates: [
+4247,
+2565
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nunavut",
+POP_MAX: 1000,
+name: "Repulse Bay"
+},
+coordinates: [
+5070,
+4547
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 19234,
+name: "Yellowknife"
+},
+coordinates: [
+2444,
+5423
+]
+},
+{
+type: "Point",
+properties: {
+province: "Northwest Territories",
+POP_MAX: 597,
+name: "Fort Good Hope"
+},
+coordinates: [
+1424,
+4111
+]
+},
+{
+type: "Point",
+properties: {
+province: "Yukon",
+POP_MAX: 23276,
+name: "Whitehorse"
+},
+coordinates: [
+363,
+5019
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 1145000,
+name: "Ottawa"
+},
+coordinates: [
+7228,
+9026
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 125,
+name: "Fort Severn"
+},
+coordinates: [
+5251,
+7031
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 99334,
+name: "Thunder Bay"
+},
+coordinates: [
+5238,
+8772
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 624177,
+name: "Qumbec"
+},
+coordinates: [
+7740,
+8497
+]
+},
+{
+type: "Point",
+properties: {
+province: "Nova Scotia",
+POP_MAX: 359111,
+name: "Halifax"
+},
+coordinates: [
+8926,
+8489
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 131469,
+name: "St. Johncs"
+},
+coordinates: [
+9983,
+7056
+]
+},
+{
+type: "Point",
+properties: {
+province: "Newfoundland and Labrador",
+POP_MAX: 1151,
+name: "Nain"
+},
+coordinates: [
+8067,
+5923
+]
+},
+{
+type: "Point",
+properties: {
+province: "Prince Edward Island",
+POP_MAX: 42402,
+name: "Charlottetown"
+},
+coordinates: [
+8845,
+8127
+]
+},
+{
+type: "Point",
+properties: {
+province: "Alberta",
+POP_MAX: 1058000,
+name: "Edmonton"
+},
+coordinates: [
+2160,
+7468
+]
+},
+{
+type: "Point",
+properties: {
+province: "Quebec",
+POP_MAX: 3678000,
+name: "Montraal"
+},
+coordinates: [
+7514,
+8907
+]
+},
+{
+type: "Point",
+properties: {
+province: "British Columbia",
+POP_MAX: 2313328,
+name: "Vancouver"
+},
+coordinates: [
+738,
+8055
+]
+},
+{
+type: "Point",
+properties: {
+province: "Ontario",
+POP_MAX: 5213000,
+name: "Toronto"
+},
+coordinates: [
+6793,
+9563
+]
+}
+]
+}
+},
+arcs: [ ],
+transform: {
+scale: [
+0.07010511513677882,
+0.06317007750213646
+],
+translate: [
+196.02088607504282,
+9.136725443859405
+]
+}
+}

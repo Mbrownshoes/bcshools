@@ -1,463 +1,316 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<met charset="utf-8">
+
+<!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="main.css">
 <style>
 
 body {
-  font: 12px "Helvetica Neue", Helvetica;
-}
-svg {
-    position: relative;
-    width: 880px;
-    height: 400px;
+	margin-left: 112px;
+	margin-right: 112px;
 }
 
-#chart {
-  font: 12px "Helvetica Neue", Helvetica;
-  
-}
-#chart_container {
-    position: absolute;
-
- 
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.x1axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+.background {
+	fill: none;
+	pointer-events: all;
 }
 
 
-.x.axis path {
-  display: none;
+
+#provinces {
+	fill: #ddd;
+	cursor: pointer;
 }
 
-.line {
-  fill: none;
-  stroke: #1f77b4;
-  stroke-width: 1.5px;
+#provinces .active {
+	fill: orange;
+	fill-opacity: 0.6;
+}
+
+#prov-borders {
+	stroke: #fff;
+	stroke-linejoin: round;
 }
 
 
-.line2 {
-  fill: none;
-  stroke: #ff7f0e;
-  stroke-width: 1.5px;
-}
 
-.MMline {
-  fill: none;
-  stroke: #aaa;
-  stroke-width: 1.5px;
-}
 
-.xaxis .domain {
-  fill: none;
-  stroke: #000;
-  stroke-opacity: .3;
-  stroke-width: 10px;
-  stroke-linecap: round;
-}
-.x1axis .halo {
-  fill: none;
-  stroke: #ddd;
-  stroke-width: 8px;
-  stroke-linecap: round;
-}
-
-.g-slider .background {
-  cursor: ew-resize !important;
-}
-.g-slider .handle {
-  fill: #fff;
-  stroke: #000;
-  stroke-width: 1.0px;
-  pointer-events: none;
-}
-#slider {
-    position: absolute;
-    top: 420px;
-    left: 480px;
-    font-size: 1em;
-}
 .g-summary {
+  font-size: 14px;
   line-height: 1.35em;
   position: absolute;
-  top: 320px;
-  left: 630px;
   width: 340px;
   color: #333;
 }
 
-select{
-    color:#fff;
-    text-shadow:0 1px 0 rgba(0,0,0,0.4);
-}
-.com1 { 
-    background: #1f77b4;
-}
-.com2 { 
-    background: #ff7f0e;
+.aboriginal {
+	fill: #006837;
 }
 
-.overlay {
-  fill: none;
-  pointer-events: all;
+
+
+.bubble {
+	fill: brown;
+	fill-opacity: .5;
+	stroke: #fff;
+	stroke-width: .1px;
 }
 
-.focus circle {
-  fill: none;
-  stroke: steelblue;
+.bubble :hover {
+	stroke: #000;
 }
+
+.legend_Pop circle {
+	fill: none;
+	stroke: #ccc;
+}
+
+.legend_Pop text {
+	fill: #777;
+	font: 10px sans-serif;
+	text-anchor: middle;
+}
+
+
+#byline {
+	padding-left: 20px;
+	margin-top: -20px;
+	font-size: 0.8em;
+}
+
+#intro {
+	padding-left: 20px;
+	font-size: 20px;
+}
+
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<!-- Latest compiled and minified CSS -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
- -->
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="main.css"> 
 
- <h1>BC Schools Grade-to-Grade Transition</h1>
-<h2>Provincial Totals for both Public and Independent Schools</h2>
- <!-- <p>Click on the map to see yearly values for that location</p>    -->
+</head>
 
-<b>See how </b>
-<select id="group" class="com1">
-    <option value = "ALL" >All </option>
-    <option value = "FEM">Female </option>
-    <option value = "MAL">Male </option>
-    <option value = "AB">Aboriginal </option>
-    <option value = "XAB">Non Aboriginal </option>
-    <option value = "FRI">French Immersion </option>
-    <option value = "SN">Special Needs No Gifted </option>
-    <option value = "ELL">English Language Learner </option>
-</select>
-<b>students compare to </b>
-<select id="group2" class="com2">
-    <option disabled selected>Select Group...</option>
-    <option value = "ALL">All </option>
-    <option value = "FEM">Female </option>
-    <option value = "MAL">Male </option>
-    <option value = "AB">Aboriginal </option>
-    <option value = "XAB">Non Aboriginal </option>
-    <option value = "FRI">French Immersion </option>
-    <option value = "SN">Special Needs No Gifted </option>
-    <option value = "ELL">English Language Learner </option>
-</select>
-<b>students.</b>
-<students.>
+<h1>BC Schools Class Size</h1>
+<!-- <p id="intro">Click on a region.</p> -->
+<p class="map" id="map">
 
-<div id="chart_container">
-    <div id="chart"></div>
-</div>
-
-<div id="slider"></div>
-
+</div>	
 <script>
 
-d3.select("#chart")
-    .append("h3")
-    .html("Grade")
-    .attr("class","g-summary")
+// d3.select("body")
 
-var parseDate = d3.time.format("%y %m").parse;
-var alldat
 
+// d3.select(".map")
+// 	.append("h3")
+// 	.html("What is it?")
+// 	.append("p")
+// 	.html("Energy East is a proposed pipeline that would transport crude oil from the Alberta oil sands to refineries and ports in Eastern Canada.")
+// 	.attr("class","g-summary")
 
-var psv = d3.dsv("|", "text/plain")
+var width = 900,
+	height = 700,
+	active = d3.select(null);
 
-var sliderHeight = 30,
-    sliderWidth = 260;
+var formatNumber = d3.format(",.0f");
 
-var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 860 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
 
-var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
-var x = d3.time.scale()
-    .range([0, width]);
+var path = d3.geo.path()
+	.projection(null);
 
-var y = d3.scale.linear()
-    .range([height, 0]);
 
+var zoom = d3.behavior.zoom()
+	.translate([0, 0])
+	.scale(1)
+	.scaleExtent([1, 8])
+	.on("zoom", zoomed);
 
-psv("ProvG2G2012_2013.txt", function(alldat) {
-    alldat.forEach(function(d) {
-      
-        d.Year = parseDate(d.Year.slice(0,2)+ " 06");
-    })
-    // console.log(alladat)
+var svg = d3.select(".map")
+	.append("svg")
+	.attr("width", width)
+	.attr("height", height)
+	.on("click", stopped, true);
 
-    var current = {"year":1},
-    maxValue = 11,
-    moving;
+var radius = d3.scale.sqrt()
+				.domain([0, 1e6])
+				.range([0,4]);
 
+var tooltip = d3.select(".map")
+				.append("div")
+				.attr("class", "tooltip");
 
 
-    var sliderContainer = d3.select("#slider").append("svg")
-          .attr("width", sliderWidth + margin.left + margin.right + 10)
-          .attr("height", sliderHeight + margin.top + margin.bottom)
-        .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top  + ")");
+svg.append("rect")
+	.attr("class", "background")
+	.attr("width", width)
+	.attr("height", height)
+	.on("click", reset);
 
-    var x1 = d3.scale.linear() // scale for slider
-          .domain([1, 11])
-          .range([0, sliderWidth])
-          .clamp(true);
+var g = svg.append("g")
 
-    var brushToyear = d3.scale.threshold()
-        .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
-        .range([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+svg
+	.call(zoom)
+	.call(zoom.event)
 
 
 
-    var playButton = d3.select("#g-play-button");
+d3.json("skulldist.json", function(error, BC) {
+	if (error) return console.error(error);
 
-    var xTicks = {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7",
-      "8": "8",
-      "9": "9",
-      "10": "10",
-      "11": "11"
-    };
-    var xAxis1 = d3.svg.axis() // added this just to get the ticks to show up
-        .scale(x1)
-        .orient("bottom")
-        .ticks(12)
-        .tickFormat(function(d) { 
-                return xTicks[d]; })
-        .tickSize(10, 0)
-        .tickPadding(0);
 
+	g.append("g")
+		.attr("id", "provinces")
+		.selectAll("path")
+		.data(topojson.feature(BC, BC.objects.skulldist).features)
+		.enter()
+		.append("path")
+		.attr("d", path)
+		.attr("id", "prov-borders")
+		.on("click", clicked);
+		// .attr("class", "border border--prov")
 
-    var brush = d3.svg.brush()
-        .x(x1)
-        .extent([current.year, current.year])
-        .on("brush", brushed);
+	// g.append("path")
+	// 	.datum(topojson.mesh(canada, canada.objects.prov, function(a, b) {
+	// 		return a !== b;
+	// 	}))
+	// 	.attr("id", "prov-borders")
+	// 	.attr("d", path);
 
 
-    group = $('#group').val();
 
-    chartData = gatherdata(alldat, current.year, group)
-	
 
 
-    $(document).ready(function() {
-        $('#group').on('change', function(data) {
-            group = $('#group').val();
-            console.log(group)
-            groupNo = 1
 
-            chartData = gatherdata(alldat, current.year, group)
-
-            updatechart(chartData, groupNo)
+var data = ["Gas pipeline (to be converted for oil)", "New pipeline (to be built)", "Aboriginal lands"]
+var color = ["steelblue", "hotpink","#006837"]
 
-        });
-    });
-
-    //Change second line
-    $(document).ready(function() {
-        $('#group2').on('change', function(data) {
-            group2 = $('#group2').val();
-            groupNo = 2
-
-            chartData = gatherdata(alldat, current.year, group2)
-
-            updatechart(chartData, groupNo)
-
-        });
-    });
-
-
-    var x = d3.time.scale()
-        .range([0, width]);
-
-    var y = d3.scale.linear()
-        .range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left");
-
-    var line = d3.svg.line()
-        .x(function(d) { 
-            return x(d.date); })
-        .y(function(d) { return y(d.avg); });
-
-
-    var svg = d3.select("#chart").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-    sliderContainer.append("g")
-      .attr("class", "x1axis")
-      .attr("transform", "translate(0," + sliderHeight / 2 + ")")
-      .call(d3.svg.axis()
-              .scale(x1)
-              .orient("bottom")
-              .ticks(12)
-              .tickFormat(function(d) { 
-                return xTicks[d]; })
-              .tickSize(0)
-              .tickPadding(12))
-              .select(".domain") // rest stylized the slider to hide ticks
-              .select(function() { 
-                return this.parentNode.appendChild(this.cloneNode(true)); 
-              })
-              .attr("class", "halo");
-
-    sliderContainer.call(xAxis1)
-         
-    var slider = sliderContainer.append("g")
-      .attr("class", "g-slider")
-      .call(brush);
-    slider.selectAll(".extent, .resize").remove();
-    slider.select(".background").attr("height", sliderHeight);
-
-    var handle = slider.append("circle")
-      .attr("class", "handle")
-      .attr("transform", "translate(0," + sliderHeight / 2 + ")")
-      .attr("r", 9);
-
-    makechart(chartData)
-
-    // slider.call(brush.event)
-    //     .call(brush.extent([5,5]));
-
-    slider.call(brush.event)
-        .transition()
-        .duration(1000)
-        .call(brush.extent([10,10]))
-        .call(brush.event);
-
-
-    function makechart(data){
-        console.log('start: '+ current.year)
-
-    	x.domain(d3.extent(data, function(d) {
-         return d.date; }));
-    	y.domain([40, 100]);
-    	// y.domain(d3.extent(data, function(d) { return d.max; }));
-
-    	svg.append("g")
-    		.attr("class", "x axis")
-    		.attr("transform", "translate(0," + height + ")")
-    		.call(xAxis);
-
-    	svg.append("g")
-    		.attr("class", "y axis")
-    		.call(yAxis)
-    		.append("text")
-    		.attr("transform", "rotate(-90)")
-    		.attr("y", -46)
-    		.attr("dy", ".71em")
-    		.style("text-anchor", "end")
-    		.text("Transition Rate (%)");
-
-    	svg.append("path")
-    		.attr("class", "line")
-    		.attr("d", line(data));
-
-        svg.append("path")
-            .attr("class", "line2")
-            .attr("d", line([]));
-    }
-
-
-    function updatechart(data, groupNo){
-
-    	x.domain(d3.extent(data, function(d) {
-         return d.date; }));
-        y.domain([40, 100]);
-
-        if (groupNo == 1){
-            svg.select(".line")
-                .transition()
-                .duration(1000)
-                .attr("d", line(data));
-        } else {
-            svg.select(".line2")
-                .transition()
-                .duration(1000)
-                .attr("d", line(data));
-        }    	
-
-         //Update X axis
-    	    // svg.select(".x.axis")
-    		   //  .transition()
-    	    //     .duration(1000)
-    	    //     .call(xAxis);
-
-    }
-
-    function brushed() {
-
-        var value = brush.extent()[0];
-
-        if (d3.event.sourceEvent) {
-
-            value = Math.round(x1.invert(d3.mouse(this)[0]));
-            brush.extent([value, value]);
-        }
-        handle.attr("cx", x1(value));
-        
-        var brushDate = brushToyear(value-1);
-        current.year = brushDate;
-        group = $('#group').val();
-        group2 = $('#group2').val();
-
-        chartData1 = gatherdata(alldat, current.year,group)
-        chartData2 = gatherdata(alldat, current.year, group2)
-        updatechart(chartData1, 1)
-        updatechart(chartData2, 2)
-
-    }
-  
-
-    function gatherdata(datain, yearIn, group) {
-        var chartData = []
-        for (i = 0; i < alldat.length; i++) {
-            if (alldat[i].Grade == yearIn  && alldat[i].Group == group && alldat[i].district == "Greater Victoria"){
-                chartData.push({
-                    grade: alldat[i].Grade,
-                    date: alldat[i].Year,
-                    avg: Number(alldat[i].Perc)
-                })
-            }
-        }
-        return chartData;
-    }
-
-})
 
 
+
+});
+
+function clicked(d) {
+	g.selectAll([".bubble", ".aboriginal", ".legend_Pop"]).remove();
+	d3.select("h3").style("visibility","hidden")
+
+	console.log(d)
+	dist_name = d.properties.zone;
+
+  if (active.node() === this) return reset();
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
+
+
+	var bounds = path.bounds(d),
+	  dx = bounds[1][0] - bounds[0][0],
+	  dy = bounds[1][1] - bounds[0][1],
+	  x = (bounds[0][0] + bounds[1][0]) / 2,
+	  y = (bounds[0][1] + bounds[1][1]) / 2,
+	  scale = .6 / Math.max(dx / width, dy / height),
+	  translate = [width / 2 - scale * x, height / 2 - scale * y];
+	  
+
+	svg.transition()
+		.duration(750)
+		.call(zoom.translate(translate).scale(scale).event);
+	 
+
+	var tooltip = d3.select(".map")
+		.append("div")
+		.style("position", "absolute")
+		.style("z-index", "10")
+		.style("visibility", "hidden")
+		.style("color", "#222")
+		.style("padding", "8px")
+		.style("background-color", "#fff")
+		.style("border-radius", "6px")
+		.style("font", "12 px sans-serif")
+		.text("tooltip");
+
+
+	var data = {
+	    resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
+	    limit: 80000, // get 5 results
+	    q: dist_name
+	};
+
+	$.ajax({
+	    url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
+	    data: data,
+	    dataType: 'jsonp',
+	    success: function(data) {
+	        data = data.result.records
+	        test = data
+	       //  data.forEach(function(d) {
+	       //  	console.log(d)
+	       //      test = d
+	       //      d.Year = parseDate(d.year.slice(0, 2) + " 06");
+	       //      // console.log(d.Year)
+        // })
+	    }
+		})
+
+// 	d3.json("cities.json", function(error, cities) {
+// 		if (error) return console.error(error);
+// 		g.append("g")
+// 			.attr("class", "bubble")
+//             .selectAll("circle")
+//             .data(topojson.feature(cities, cities.objects.cities).features.filter(function(d) { return prov_name == d.properties.province; }))
+//             .enter()
+//             .append("circle")
+// 		.attr("transform", function(d) {
+// 			return "translate(" + path.centroid(d) + ")";
+// 		})
+// 		.attr("r", function(d) {
+// 			return radius(d.properties.POP_MAX);
+// 		})
+// 		.on("mouseover", function(d) {
+// 			tooltip.text(d.properties.name
+// 		 	+ ":\nPopulation " + formatNumber(d.properties.POP_MAX));
+// 		 	tooltip.style("visibility", "visible");
+// 		})
+// 		.on("mousemove", function(){
+// 			return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+// 		})
+// 		.on("mouseout", function(){ return tooltip.style("visibility", "hidden");});
+
+
+
+// })
+
+};
+
+function reset() {
+  active.classed("active", false);
+  active = d3.select(null);
+
+  svg.transition()
+      .duration(750)
+      .call(zoom.translate([0, 0]).scale(1).event);
+
+  d3.select("h3")
+  .transition()
+  .delay(750)
+  .style("visibility","visible");
+}
+
+function zoomed() {
+  g.style("stroke-width", 1.5 / d3.event.scale + "px");
+  g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
+// If the drag behavior prevents the default click,
+// also stop propagation so we don’t click-to-zoom.
+function stopped() {
+  if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
 
 </script>
 
+<!-- </div> -->
+<!-- </div>
+</div> -->
