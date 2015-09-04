@@ -103,6 +103,14 @@ body {
 
 // d3.select("body")
 
+// var projection=d3.geo.albers()
+// 	.rotate([96, 5]) 
+//     .center([-32, 58.5]) 
+//     .parallels([20, 60]) 
+//     .scale(1970) 
+//     .translate([width / 2, height / 2]);
+
+
 
 // d3.select(".map")
 // 	.append("h3")
@@ -197,7 +205,8 @@ function clicked(d) {
 	g.selectAll([".bubble", ".aboriginal", ".legend_Pop"]).remove();
 	d3.select("h3").style("visibility","hidden")
 
-	console.log(d)
+	console.log(d.properties.zone)
+	dist_num = d.properties.zoneNum;
 	dist_name = d.properties.zone;
 
   if (active.node() === this) return reset();
@@ -235,7 +244,7 @@ function clicked(d) {
 	var data = {
 	    resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
 	    limit: 80000, // get 5 results
-	    q: dist_name
+	    filters: '{"DISTRICT_NUMBER":'+dist_num+'}'
 	};
 
 	$.ajax({
@@ -243,8 +252,41 @@ function clicked(d) {
 	    data: data,
 	    dataType: 'jsonp',
 	    success: function(data) {
-	        data = data.result.records
-	        test = data
+	        scholLoc = data.result.records
+	        test=scholLoc
+
+		var projection=d3.geo.albers()
+			.rotate([96, 5]) 
+		    .center([-32, 58.5]) 
+		    .parallels([20, 60]) 
+		    .scale(1970) 
+		    .translate([960 / 2, 600 / 2]);
+
+	        g.append("g")
+			.attr("class", "bubble")
+            .selectAll("circle")
+            .data(scholLoc)
+            .enter()
+            .append("circle")
+			.attr("cx", function(d) {
+				console.log(projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)]))
+				return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[0];
+			})
+			.attr("cy", function(d) {
+				return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[1];
+			})
+			.attr("r", .1);
+			// })
+			// .on("mouseover", function(d) {
+			// 	tooltip.text(d.properties.name
+			//  	+ ":\nPopulation " + formatNumber(d.properties.POP_MAX));
+			//  	tooltip.style("visibility", "visible");
+			// })
+			// .on("mousemove", function(){
+			// 	return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+			// })
+			// .on("mouseout", function(){ return tooltip.style("visibility", "hidden");});
+	        // console.log(scholLoc)
 	       //  data.forEach(function(d) {
 	       //  	console.log(d)
 	       //      test = d
@@ -254,33 +296,34 @@ function clicked(d) {
 	    }
 		})
 
-// 	d3.json("cities.json", function(error, cities) {
-// 		if (error) return console.error(error);
-// 		g.append("g")
-// 			.attr("class", "bubble")
-//             .selectAll("circle")
-//             .data(topojson.feature(cities, cities.objects.cities).features.filter(function(d) { return prov_name == d.properties.province; }))
-//             .enter()
-//             .append("circle")
-// 		.attr("transform", function(d) {
-// 			return "translate(" + path.centroid(d) + ")";
-// 		})
-// 		.attr("r", function(d) {
-// 			return radius(d.properties.POP_MAX);
-// 		})
-// 		.on("mouseover", function(d) {
-// 			tooltip.text(d.properties.name
-// 		 	+ ":\nPopulation " + formatNumber(d.properties.POP_MAX));
-// 		 	tooltip.style("visibility", "visible");
-// 		})
-// 		.on("mousemove", function(){
-// 			return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-// 		})
-// 		.on("mouseout", function(){ return tooltip.style("visibility", "hidden");});
+	// d3.json("cities.json", function(error, cities) {
+	// 	if (error) return console.error(error);
+	// 	console.log(cities)
+	// 	g.append("g")
+	// 		.attr("class", "bubble")
+ //            .selectAll("circle")
+ //            .data(topojson.feature(cities, cities.objects.cities).features.filter(function(d) { return prov_name == d.properties.province; }))
+ //            .enter()
+ //            .append("circle")
+	// 	.attr("transform", function(d) {
+	// 		return "translate(" + path.centroid(d) + ")";
+	// 	})
+	// 	.attr("r", function(d) {
+	// 		return radius(d.properties.POP_MAX);
+	// 	})
+	// 	.on("mouseover", function(d) {
+	// 		tooltip.text(d.properties.name
+	// 	 	+ ":\nPopulation " + formatNumber(d.properties.POP_MAX));
+	// 	 	tooltip.style("visibility", "visible");
+	// 	})
+	// 	.on("mousemove", function(){
+	// 		return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+	// 	})
+	// 	.on("mouseout", function(){ return tooltip.style("visibility", "hidden");});
 
 
 
-// })
+	// })
 
 };
 

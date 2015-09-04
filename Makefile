@@ -52,7 +52,8 @@ skulldist.json: build/sd.json
 		    .parallels([20, 60]) \
 		    .scale(1970) \
 		    .translate([width / 2, height / 2])' \
-	    --properties='zone=CDNAME' \
+	    --properties='zone=SD_NAME' \
+	    --properties='zoneNum=SD_NUM' \
 	    --simplify=0.05 \
 		-- skulldist=$<
 
