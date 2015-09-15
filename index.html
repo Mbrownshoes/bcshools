@@ -102,7 +102,7 @@
     // d3.select("body")
 
     // var projection=d3.geo.albers()
-    // 	.rotate([96, 5]) 
+    //  .rotate([96, 5]) 
     //     .center([-32, 58.5]) 
     //     .parallels([20, 60]) 
     //     .scale(1970) 
@@ -111,11 +111,11 @@
 
 
     // d3.select(".map")
-    // 	.append("h3")
-    // 	.html("What is it?")
-    // 	.append("p")
-    // 	.html("Energy East is a proposed pipeline that would transport crude oil from the Alberta oil sands to refineries and ports in Eastern Canada.")
-    // 	.attr("class","g-summary")
+    //  .append("h3")
+    //  .html("What is it?")
+    //  .append("p")
+    //  .html("Energy East is a proposed pipeline that would transport crude oil from the Alberta oil sands to refineries and ports in Eastern Canada.")
+    //  .attr("class","g-summary")
 
 var width = 900,
     height = 700,
@@ -180,11 +180,11 @@ d3.json("skulldist.json", function(error, BC) {
     // .attr("class", "border border--prov")
 
     // g.append("path")
-    // 	.datum(topojson.mesh(canada, canada.objects.prov, function(a, b) {
-    // 		return a !== b;
-    // 	}))
-    // 	.attr("id", "prov-borders")
-    // 	.attr("d", path);
+    //  .datum(topojson.mesh(canada, canada.objects.prov, function(a, b) {
+    //      return a !== b;
+    //  }))
+    //  .attr("id", "prov-borders")
+    //  .attr("d", path);
 
 
 
@@ -288,7 +288,7 @@ function clicked(d) {
                     return tooltip.style("visibility", "hidden");
                 })
                 .on("click", function(d) {
-                	makeChart(d.SCHOOL_NAME);
+                    makeChart(d.SCHOOL_NAME);
                 });
             // console.log(scholLoc)
 
@@ -327,27 +327,27 @@ function stopped() {
 }
 
 function makeChart(d) {
-	console.log(typeof(d))
-	var parseDate = d3.time.format("%y %m").parse;
-	var alldat
+    console.log(typeof(d))
+    var parseDate = d3.time.format("%y %m").parse;
+    var alldat
 
 
-	var psv = d3.dsv("|", "text/plain")
+    var psv = d3.dsv("|", "text/plain")
 
-	var sliderHeight = 30,
-	    sliderWidth = 260;
+    var sliderHeight = 30,
+        sliderWidth = 260;
 
-	var margin = {top: 20, right: 20, bottom: 30, left: 50},
-	    width = 860 - margin.left - margin.right,
-	    height = 400 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+        width = 860 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
 
-	var bisectDate = d3.bisector(function(d) { return d.date; }).left;
+    var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
-	var x = d3.time.scale()
-	    .range([0, width]);
+    var x = d3.time.scale()
+        .range([0, width]);
 
-	var y = d3.scale.linear()
-	    .range([height, 0]);
+    var y = d3.scale.linear()
+        .range([height, 0]);
 
 
     var data2 = {
@@ -363,10 +363,10 @@ $.ajax({
     data: data2,
     dataType: 'jsonp',
     success: function(data) {
-    	console.log(data)
+        console.log(data)
         data = data.result.records
         data.forEach(function(d) {
-        	console.log(d)
+            console.log(d)
             // test = d
             // d.Year = parseDate(d.year.slice(0, 2) + " 06");
             // console.log(d.Year)
