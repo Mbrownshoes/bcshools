@@ -21,6 +21,7 @@ prov.json: build/gpr_000b11a_e.shp
 
 build/subunits.json: build/Boundaries/CD_2011.shp
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ogr2ogr -f GeoJSON  -t_srs "+proj=latlong +datum=WGS84" \
 	build/subunits.json \
 	build/Boundaries/CD_2011.shp
@@ -77,3 +78,55 @@ skulldist.json: build/sd.json
 	build/subunits.json \
 	build/Boundaries/CD_2011.shp
 >>>>>>> 35dbee012ff3968f327fc5df744c8aeb3e6f6de0
+=======
+	ogr2ogr -f GeoJSON  -t_srs "+proj=latlong +datum=WGS84" \
+	build/subunits.json \
+	build/Boundaries/CD_2011.shp
+
+census.json: build/subunits.json
+	node_modules/.bin/topojson \
+		-o $@ \
+		--projection='width = 960, height = 600, d3.geo.albers() \
+			.rotate([96, 5]) \
+		    .center([-32, 58.5]) \
+		    .parallels([20, 60]) \
+		    .scale(1970) \
+		    .translate([width / 2, height / 2])' \
+	    --properties='zone=CDNAME' \
+	    --simplify=0.05 \
+		-- census=$<
+
+# school districts
+build/sd.json: build/TA_SD_SVW/TA_SD_SVW_polygon.shp
+	ogr2ogr -f GeoJSON  -t_srs "+proj=latlong +datum=WGS84" \
+	build/sd.json \
+	build/TA_SD_SVW/TA_SD_SVW_polygon.shp
+
+skulldist.json: build/sd.json
+	node_modules/.bin/topojson \
+		-o $@ \
+		--projection='width = 960, height = 600, d3.geo.albers() \
+			.rotate([96, 5]) \
+		    .center([-32, 58.5]) \
+		    .parallels([20, 60]) \
+		    .scale(1970) \
+		    .translate([width / 2, height / 2])' \
+	    --properties='zone=SD_NAME' \
+	    --properties='zoneNum=SD_NUM' \
+	    --simplify=0.05 \
+		-- skulldist=$<
+
+
+# Use BC Albers Projection
+# build/subunits.json: build/Boundaries/CD_2011.shp
+# 	ogr2ogr -f GeoJSON  -t_srs "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45
+# +lon_0=-126 +x_0=1000000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs" \
+# 	build/subunits.json \
+# 	build/Boundaries/CD_2011.shp
+
+# census.json: build/subunits.json
+# 	node_modules/.bin/topojson \
+# 		-o $@ \
+# 	    --properties='zone=CDNAME' \
+# 		-- census=$<
+>>>>>>> 7aa0f8a8fc7aad3b1c74fda6e491d6a5edc02ec1
