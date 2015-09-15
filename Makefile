@@ -20,6 +20,7 @@ prov.json: build/gpr_000b11a_e.shp
 		-- prov=$<
 
 build/subunits.json: build/Boundaries/CD_2011.shp
+<<<<<<< HEAD
 	ogr2ogr -f GeoJSON  -t_srs "+proj=latlong +datum=WGS84" \
 	build/subunits.json \
 	build/Boundaries/CD_2011.shp
@@ -70,3 +71,9 @@ skulldist.json: build/sd.json
 # 		-o $@ \
 # 	    --properties='zone=CDNAME' \
 # 		-- census=$<
+=======
+	ogr2ogr -f GeoJSON  -t_srs "+proj=latlong +datum=WGS84" -where "CDNAME IN ('Alberni-Clayoquot')" \
+	-clipdst -125.1550643102 48.8344612907 -126.1800723924 49.2711484127 \
+	build/subunits.json \
+	build/Boundaries/CD_2011.shp
+>>>>>>> 35dbee012ff3968f327fc5df744c8aeb3e6f6de0
