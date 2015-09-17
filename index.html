@@ -363,7 +363,6 @@ $.ajax({
     data: data2,
     dataType: 'jsonp',
     success: function(data) {
-        console.log(data)
         data = data.result.records
         data.forEach(function(d) {
             console.log(d)
@@ -454,18 +453,7 @@ $.ajax({
             });
         });
 
-        //Change second line
-        $(document).ready(function() {
-            $('#dist').on('change', function(data) {
-                dist = $('#dist').val();
-                groupNo = 1
-
-                chartData = gatherdata(data, dist, group)
-
-                updatechart(chartData, groupNo)
-
-            });
-        });
+      
 
 
         var x = d3.time.scale()
