@@ -188,8 +188,8 @@ d3.json("skulldist.json", function(error, BC) {
 
 
 
-    var data = ["Gas pipeline (to be converted for oil)", "New pipeline (to be built)", "Aboriginal lands"]
-    var color = ["steelblue", "hotpink", "#006837"]
+    // var data = ["Gas pipeline (to be converted for oil)", "New pipeline (to be built)", "Aboriginal lands"]
+    // var color = ["steelblue", "hotpink", "#006837"]
 
 
 
@@ -288,7 +288,7 @@ function clicked(d) {
                     return tooltip.style("visibility", "hidden");
                 })
                 .on("click", function(d) {
-                    makeChart(d.SCHOOL_NAME);
+                    makeChart(d);
                 });
             // console.log(scholLoc)
 
@@ -326,320 +326,104 @@ function stopped() {
     if (d3.event.defaultPrevented) d3.event.stopPropagation();
 }
 
+// Chart stuff
+
+margin = {
+    top: 20,
+    right: 20,
+    bottom: 30,
+    left: 50
+};
+
+var widthG = 760 / 2 - margin.left - margin.right,
+    heightG = 250 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%Y-%m-%d").parse;
+
 function makeChart(d) {
-    console.log(typeof(d))
-    var parseDate = d3.time.format("%y %m").parse;
-    var alldat
+    console.log(d)
+    "use strict";
 
+    //setup graph but hide it.
 
-    var psv = d3.dsv("|", "text/plain")
+    var chartData = d;
 
-    var sliderHeight = 30,
-        sliderWidth = 260;
-
-    var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = 860 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
-
-    var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
     var x = d3.time.scale()
-        .range([0, width]);
+        .domain([d3.extent(chartData, function (d) {
+            return d.x;
+        })])
+        .range([0, widthG]);
 
     var y = d3.scale.linear()
-        .range([height, 0]);
+        .range([heightG, 0]);
 
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .ticks(11)
+        .orient("bottom")
+        .tickFormat(d3.time.format("%b"));
 
-    var data2 = {
-        resource_id: '9ba355b1-8c5d-491a-b3e0-b0d45e6effb8', // the resource id
-        limit: 20000, 
-        // filters: '{"School Name":"Cawston Primary School"}'
-        filters: '{"School Name":' + '"' + d + '"' + '}'
-    };
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .ticks(5, ",.1")
+        .orient("left");
 
-
-$.ajax({
-    url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
-    data: data2,
-    dataType: 'jsonp',
-    success: function(data) {
-        data = data.result.records
-        data.forEach(function(d) {
-            console.log(d)
-            // test = d
-            // d.Year = parseDate(d.year.slice(0, 2) + " 06");
-            // console.log(d.Year)
+    var line = d3.svg.line()
+        .interpolate("linear")
+        .x(function (d) {
+            return x(d.x);
         })
-
-        var current = {
-                "grade": 10
-            },
-            maxValue = 12,
-            moving;
-
-        var ordScale = d3.scale.ordinal()
-            .domain(data.map( function (d) { return d.district; }).sort());
-
-        var dis = ordScale.domain()
-        items = []
-        $.each(dis, function(key, value){
-            items.push(value)
-                var option = $('<option />').text(value);
-                
-                $("#dist").append(option);
-            });
-
-        var sliderContainer = d3.select("#slider").append("svg")
-            .attr("width", sliderWidth + margin.left + margin.right + 10)
-            .attr("height", sliderHeight + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        var x1 = d3.scale.linear() // scale for slider
-            .domain([10, 12])
-            .range([0, sliderWidth])
-            .clamp(true);
-
-        var brushToyear = d3.scale.threshold()
-            .domain([10, 11, 12])
-            .range([10, 11, 12]);
-
-
-
-        var playButton = d3.select("#g-play-button");
-
-        var xTicks = {
-            "10": "10",
-            "11": "11",
-            "12": "12"
-        };
-        var xAxis1 = d3.svg.axis() // added this just to get the ticks to show up
-            .scale(x1)
-            .orient("bottom")
-            .ticks(2)
-            .tickFormat(function(d) {
-                return xTicks[d];
-            })
-            .tickSize(10, 0)
-            .tickPadding(0);
-
-
-        var brush = d3.svg.brush()
-            .x(x1)
-            .extent([current.grade, current.grade])
-            .on("brush", brushed);
-
-
-        group = $('#group').val();
-        dist = $('#dist').val();
-        console.log('group: ' + group)
-        console.log('grade: ' + current.grade)
-
-        chartData = gatherdata(data, dist, group)
-
-
-        $(document).ready(function() {
-            $('#group').on('change', function(data) {
-                group = $('#group').val();
-                dist = $('#dist').val();
-                console.log(dist)
-                groupNo = 1
-                console.log(data)
-                chartData = gatherdata(data, dist, group)
-
-
-                updatechart(chartData, groupNo)
-
-            });
+        .y(function (d) {
+            return y(d.y);
         });
 
-      
+    var meanLine = d3.svg.line()
+        .x(function (d) {
+            return x(d.x);
+        })
+        .y(function (d) {
+            return y(d.y);
+        });
+
+                    
+
+    svg = d3.select("#chart").append("svg")
+        .attr("width", widthG + 100 + margin.left + margin.right)
+        .attr("height", heightG + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-        var x = d3.time.scale()
-            .range([0, width]);
+    y.domain([0, 0]);
 
-        var y = d3.scale.linear()
-            .range([height, 0]);
+    svg.append("g") //x axis group
+        .attr("class", "x axisC")
+        .attr("transform", "translate(0," + heightG + ")")
+        .call(xAxis);
 
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", line(chartData));
 
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
+    var AvgLine = svg.append("g");
 
-        var line = d3.svg.line()
-            .x(function(d) {
-                return x(d.date);
-            })
-            .y(function(d) {
-                return y(d.avg);
-            });
+    AvgLine.append("path")
+        .attr("class", "line1")
+        .attr("d", meanLine(chartData));
 
-
-        var svg = d3.select("#chart").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-        // sliderContainer.append("g")
-        //     .attr("class", "x1axis")
-        //     .attr("transform", "translate(0," + sliderHeight / 2 + ")")
-        //     .call(d3.svg.axis()
-        //         .scale(x1)
-        //         .orient("bottom")
-        //         .ticks(12)
-        //         .tickFormat(function(d) {
-        //             return xTicks[d];
-        //         })
-        //         .tickSize(0)
-        //         .tickPadding(12))
-        //     .select(".domain") // rest stylized the slider to hide ticks
-        //     .select(function() {
-        //         return this.parentNode.appendChild(this.cloneNode(true));
-        //     })
-        //     .attr("class", "halo");
-
-        // sliderContainer.call(xAxis1)
-
-        // var slider = sliderContainer.append("g")
-        //     .attr("class", "g-slider")
-        //     .call(brush);
-        // slider.selectAll(".extent, .resize").remove();
-        // slider.select(".background").attr("height", sliderHeight);
-
-        // var handle = slider.append("circle")
-        //     .attr("class", "handle")
-        //     .attr("transform", "translate(0," + sliderHeight / 2 + ")")
-        //     .attr("r", 9);
-
-        makechart(chartData)
-
-
-
-        // slider.call(brush.event)
-        //     .transition()
-        //     .duration(1000)
-        //     .call(brush.extent([12, 12]))
-        //     .call(brush.event);
-
-
-        function makechart(data) {
-            console.log('start: ' + current.grade)
-
-            x.domain(d3.extent(data, function(d) {
-                return d.date;
-            }));
-            y.domain([40, 100]);
-            // y.domain(d3.extent(data, function(d) { return d.max; }));
-
-            svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-
-            svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -46)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text("Final Mark (%)");
-
-            svg.append("path")
-                .attr("class", "line")
-                .attr("d", line(data));
-
-            svg.append("path")
-                .attr("class", "line2")
-                .attr("d", line([]));
-        }
-
-
-        function updatechart(data, groupNo) {
-            console.log(data)
-
-            x.domain(d3.extent(data, function(d) {
-                return d.date;
-            }));
-            y.domain([40, 100]);
-
-            if (groupNo == 1) {
-                svg.select(".line")
-                    .transition()
-                    .duration(1000)
-                    .attr("d", line(data));
-            } else {
-                svg.select(".line2")
-                    .transition()
-                    .duration(1000)
-                    .attr("d", line(data));
-            }
-
-            //Update X axis
-            // svg.select(".x.axis")
-            //  .transition()
-            //     .duration(1000)
-            //     .call(xAxis);
-
-        }
-
-        function brushed() {
-
-            var value = brush.extent()[0];
-
-            if (d3.event.sourceEvent) {
-
-                value = Math.round(x1.invert(d3.mouse(this)[0]));
-                brush.extent([value, value]);
-            }
-            handle.attr("cx", x1(value));
-
-            var brushDate = brushToyear(value - 1);
-            current.grade = brushDate;
-            console.log(current.grade)
-            group = $('#group').val();
-            // dist = $('#dist').val();
-            console.log(current.grade)
-
-            chartData1 = gatherdata(data, current.grade, group)
-
-            // chartData2 = gatherdata(data, current.grade, dist)
-            updatechart(chartData1, 1)
-            // updatechart(chartData2, 2)
-
-        }
-
-
-        function gatherdata(datain, dist, group) {
-            
-            var chartData = []
-            for (i = 0; i < data.length; i++) {
-                if (data[i].district == dist && data[i].type == "FINAL_MARKS" && data[i].sub_pop == group && data[i].course == "Science 10") {
-                    // break;
-                    chartData.push({
-                        district: data[i].district,
-                        grade: data[i].grade,
-                        date: data[i].Year,
-                        avg: Number(data[i].avg_grd)
-                    })
-                }
-            }
-            return chartData;
-        }
-
-
-    }
-});
-
-
-
+    svg.selectAll("circle")
+        .data(chartData)
+        .enter()
+        .append("circle")
+        .attr("r", 3.5)
+        .attr("cx", function (d) {
+            return x(d.x);
+        })
+        .attr("cy", function (d) {
+            return y(d.y);
+        })
+        .style("fill", "rgb(214,39,40)");
 }
 
 </script>
