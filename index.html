@@ -177,22 +177,6 @@ d3.json("skulldist.json", function(error, BC) {
         .attr("d", path)
         .attr("id", "prov-borders")
         .on("click", clicked);
-    // .attr("class", "border border--prov")
-
-    // g.append("path")
-    //  .datum(topojson.mesh(canada, canada.objects.prov, function(a, b) {
-    //      return a !== b;
-    //  }))
-    //  .attr("id", "prov-borders")
-    //  .attr("d", path);
-
-
-
-    // var data = ["Gas pipeline (to be converted for oil)", "New pipeline (to be built)", "Aboriginal lands"]
-    // var color = ["steelblue", "hotpink", "#006837"]
-
-
-
 
 });
 
@@ -341,13 +325,49 @@ var widthG = 760 / 2 - margin.left - margin.right,
 var parseDate = d3.time.format("%Y-%m-%d").parse;
 
 function makeChart(d) {
-    console.log(d)
+    console.log(d.SCHOOL_NAME)
     "use strict";
+    var data = {
+        resource_id: '68106e98-99f4-49f2-bcfb-d8093d77602d', // the resource id
+        limit: 1000, // get 5 results
+        filters: '{"School Name":"Jaffray Elem-Jr Secondary"}'
+    };
+
+    $.ajax({
+        url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
+        data: data,
+        dataType: 'jsonp',
+        success: function(data) {
+            console.log(data)
+            scholLoc = data.result.records
+            test = scholLoc
+        }
+    })
+
+//         var data = {
+//         resource_id: '3f51a664-efbf-4bd0-8a2d-256ca44c2271', // the resource id
+//         limit: 10000
+//         // filters: '{"School Name":"Jaffray Elem-Jr Secondary"}'
+//     };
+//     // console.log('{"School Name":'+'"'+d.SCHOOL_NAME+'"'+'}')
+// // filters: '{"DISTRICT_NUMBER":' + dist_num + '}'
+//     $.ajax({
+//         url: 'http://cat.data.gov.bc.ca/api/action/datastore_search',
+//         data: data,
+//         dataType: 'jsonp',
+//         success: function(data) {
+//             test = data
+//             console.log(data.result.records)
+//             // scholLoc = data
+//             // test = scholLoc
+//         }
+//     })
+    
 
     //setup graph but hide it.
 
     var chartData = d;
-
+    console.log(chartData)
 
     var x = d3.time.scale()
         .domain([d3.extent(chartData, function (d) {

@@ -6,9 +6,9 @@ body {
   font: 12px "Helvetica Neue", Helvetica;
 }
 svg {
-    position: relative;
-    width: 880px;
-    height: 400px;
+  position: relative;
+  width: 880px;
+  height: 400px;
 }
 
 #chart {
@@ -16,9 +16,9 @@ svg {
   
 }
 #chart_container {
-    position: absolute;
+  position: absolute;
 
- 
+
 }
 
 .axis path,
@@ -82,10 +82,10 @@ svg {
   pointer-events: none;
 }
 #slider {
-    position: absolute;
-    top: 420px;
-    left: 480px;
-    font-size: 1em;
+  position: absolute;
+  top: 420px;
+  left: 480px;
+  font-size: 1em;
 }
 .g-summary {
   line-height: 1.35em;
@@ -97,14 +97,14 @@ svg {
 }
 
 select{
-    color:#fff;
-    text-shadow:0 1px 0 rgba(0,0,0,0.4);
+  color:#fff;
+  text-shadow:0 1px 0 rgba(0,0,0,0.4);
 }
 .com1 { 
-    background: #1f77b4;
+  background: #1f77b4;
 }
 .com2 { 
-    background: #ff7f0e;
+  background: #ff7f0e;
 }
 
 .overlay {
@@ -118,50 +118,50 @@ select{
 }
 </style>
 <body>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<!-- Latest compiled and minified CSS -->
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <!-- Latest compiled and minified CSS -->
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
- -->
+-->
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="main.css"> 
 
- <h1>BC Schools Grade-to-Grade Transition</h1>
+<h1>BC Schools Grade-to-Grade Transition</h1>
 <h2>Provincial Totals for both Public and Independent Schools</h2>
- <!-- <p>Click on the map to see yearly values for that location</p>    -->
+<!-- <p>Click on the map to see yearly values for that location</p>    -->
 
 <b>See how </b>
 <select id="group" class="com1">
-    <option value = "ALL" >All </option>
-    <option value = "FEM">Female </option>
-    <option value = "MAL">Male </option>
-    <option value = "AB">Aboriginal </option>
-    <option value = "XAB">Non Aboriginal </option>
-    <option value = "FRI">French Immersion </option>
-    <option value = "SN">Special Needs No Gifted </option>
-    <option value = "ELL">English Language Learner </option>
+  <option value = "ALL" >All </option>
+  <option value = "FEM">Female </option>
+  <option value = "MAL">Male </option>
+  <option value = "AB">Aboriginal </option>
+  <option value = "XAB">Non Aboriginal </option>
+  <option value = "FRI">French Immersion </option>
+  <option value = "SN">Special Needs No Gifted </option>
+  <option value = "ELL">English Language Learner </option>
 </select>
 <b>students compare to </b>
 <select id="group2" class="com2">
-    <option disabled selected>Select Group...</option>
-    <option value = "ALL">All </option>
-    <option value = "FEM">Female </option>
-    <option value = "MAL">Male </option>
-    <option value = "AB">Aboriginal </option>
-    <option value = "XAB">Non Aboriginal </option>
-    <option value = "FRI">French Immersion </option>
-    <option value = "SN">Special Needs No Gifted </option>
-    <option value = "ELL">English Language Learner </option>
+  <option disabled selected>Select Group...</option>
+  <option value = "ALL">All </option>
+  <option value = "FEM">Female </option>
+  <option value = "MAL">Male </option>
+  <option value = "AB">Aboriginal </option>
+  <option value = "XAB">Non Aboriginal </option>
+  <option value = "FRI">French Immersion </option>
+  <option value = "SN">Special Needs No Gifted </option>
+  <option value = "ELL">English Language Learner </option>
 </select>
 <b>students.</b>
 <students.>
 
 <div id="chart_container">
-    <div id="chart"></div>
+  <div id="chart"></div>
 </div>
 
 <div id="slider"></div>
@@ -169,9 +169,9 @@ select{
 <script>
 
 d3.select("#chart")
-    .append("h3")
-    .html("Grade")
-    .attr("class","g-summary")
+.append("h3")
+.html("Grade")
+.attr("class","g-summary")
 
 var parseDate = d3.time.format("%y %m").parse;
 var alldat
@@ -180,48 +180,47 @@ var alldat
 var psv = d3.dsv("|", "text/plain")
 
 var sliderHeight = 30,
-    sliderWidth = 260;
+sliderWidth = 260;
 
 var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 860 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+width = 860 - margin.left - margin.right,
+height = 400 - margin.top - margin.bottom;
 
 var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
 var x = d3.time.scale()
-    .range([0, width]);
+.range([0, width]);
 
 var y = d3.scale.linear()
-    .range([height, 0]);
+.range([height, 0]);
 
 
 psv("ProvG2G2012_2013.txt", function(alldat) {
-    alldat.forEach(function(d) {
-      
-        d.Year = parseDate(d.Year.slice(0,2)+ " 06");
-    })
-    // console.log(alladat)
+  alldat.forEach(function(d) {
 
-    var current = {"year":1},
-    maxValue = 11,
-    moving;
+    d.Year = parseDate(d.Year.slice(0,2)+ " 06");
+  })
 
+  var current = {"year":1},
+  maxValue = 11,
+  moving;
 
 
-    var sliderContainer = d3.select("#slider").append("svg")
-          .attr("width", sliderWidth + margin.left + margin.right + 10)
-          .attr("height", sliderHeight + margin.top + margin.bottom)
-        .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top  + ")");
+
+  var sliderContainer = d3.select("#slider").append("svg")
+  .attr("width", sliderWidth + margin.left + margin.right + 10)
+  .attr("height", sliderHeight + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top  + ")");
 
     var x1 = d3.scale.linear() // scale for slider
-          .domain([1, 11])
-          .range([0, sliderWidth])
-          .clamp(true);
+    .domain([1, 11])
+    .range([0, sliderWidth])
+    .clamp(true);
 
     var brushToyear = d3.scale.threshold()
-        .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
-        .range([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+    .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+    .range([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 
 
 
@@ -241,173 +240,172 @@ psv("ProvG2G2012_2013.txt", function(alldat) {
       "11": "11"
     };
     var xAxis1 = d3.svg.axis() // added this just to get the ticks to show up
-        .scale(x1)
-        .orient("bottom")
-        .ticks(12)
-        .tickFormat(function(d) { 
-                return xTicks[d]; })
-        .tickSize(10, 0)
-        .tickPadding(0);
+    .scale(x1)
+    .orient("bottom")
+    .ticks(12)
+    .tickFormat(function(d) { 
+      return xTicks[d]; })
+    .tickSize(10, 0)
+    .tickPadding(0);
 
 
     var brush = d3.svg.brush()
-        .x(x1)
-        .extent([current.year, current.year])
-        .on("brush", brushed);
+    .x(x1)
+    .extent([current.year, current.year])
+    .on("brush", brushed);
 
 
     group = $('#group').val();
 
     chartData = gatherdata(alldat, current.year, group)
-	
 
 
     $(document).ready(function() {
-        $('#group').on('change', function(data) {
-            group = $('#group').val();
-            console.log(group)
-            groupNo = 1
+      $('#group').on('change', function(data) {
+        group = $('#group').val();
+        console.log(group)
+        groupNo = 1
 
-            chartData = gatherdata(alldat, current.year, group)
+        chartData = gatherdata(alldat, current.year, group)
 
-            updatechart(chartData, groupNo)
+        updatechart(chartData, groupNo)
 
-        });
+      });
     });
 
     //Change second line
     $(document).ready(function() {
-        $('#group2').on('change', function(data) {
-            group2 = $('#group2').val();
-            groupNo = 2
+      $('#group2').on('change', function(data) {
+        group2 = $('#group2').val();
+        groupNo = 2
 
-            chartData = gatherdata(alldat, current.year, group2)
+        chartData = gatherdata(alldat, current.year, group2)
 
-            updatechart(chartData, groupNo)
+        updatechart(chartData, groupNo)
 
-        });
+      });
     });
 
 
     var x = d3.time.scale()
-        .range([0, width]);
+    .range([0, width]);
 
     var y = d3.scale.linear()
-        .range([height, 0]);
+    .range([height, 0]);
 
     var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
+    .scale(x)
+    .orient("bottom");
 
     var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left");
+    .scale(y)
+    .orient("left");
 
     var line = d3.svg.line()
-        .x(function(d) { 
-            return x(d.date); })
-        .y(function(d) { return y(d.avg); });
+    .x(function(d) { 
+      return x(d.date); })
+    .y(function(d) { return y(d.avg); });
 
 
     var svg = d3.select("#chart").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
     sliderContainer.append("g")
-      .attr("class", "x1axis")
-      .attr("transform", "translate(0," + sliderHeight / 2 + ")")
-      .call(d3.svg.axis()
-              .scale(x1)
-              .orient("bottom")
-              .ticks(12)
-              .tickFormat(function(d) { 
-                return xTicks[d]; })
-              .tickSize(0)
-              .tickPadding(12))
+    .attr("class", "x1axis")
+    .attr("transform", "translate(0," + sliderHeight / 2 + ")")
+    .call(d3.svg.axis()
+      .scale(x1)
+      .orient("bottom")
+      .ticks(12)
+      .tickFormat(function(d) { 
+        return xTicks[d]; })
+      .tickSize(0)
+      .tickPadding(12))
               .select(".domain") // rest stylized the slider to hide ticks
               .select(function() { 
                 return this.parentNode.appendChild(this.cloneNode(true)); 
               })
               .attr("class", "halo");
 
-    sliderContainer.call(xAxis1)
-         
-    var slider = sliderContainer.append("g")
-      .attr("class", "g-slider")
-      .call(brush);
-    slider.selectAll(".extent, .resize").remove();
-    slider.select(".background").attr("height", sliderHeight);
+              sliderContainer.call(xAxis1)
 
-    var handle = slider.append("circle")
-      .attr("class", "handle")
-      .attr("transform", "translate(0," + sliderHeight / 2 + ")")
-      .attr("r", 9);
+              var slider = sliderContainer.append("g")
+              .attr("class", "g-slider")
+              .call(brush);
+              slider.selectAll(".extent, .resize").remove();
+              slider.select(".background").attr("height", sliderHeight);
 
-    makechart(chartData)
+              var handle = slider.append("circle")
+              .attr("class", "handle")
+              .attr("transform", "translate(0," + sliderHeight / 2 + ")")
+              .attr("r", 9);
+
+              makechart(chartData)
 
     // slider.call(brush.event)
     //     .call(brush.extent([5,5]));
 
     slider.call(brush.event)
-        .transition()
-        .duration(1000)
-        .call(brush.extent([10,10]))
-        .call(brush.event);
+    .transition()
+    .duration(1000)
+    .call(brush.extent([10,10]))
+    .call(brush.event);
 
 
     function makechart(data){
-        console.log('start: '+ current.year)
+      console.log('start: '+ current.year)
 
-    	x.domain(d3.extent(data, function(d) {
-         return d.date; }));
-    	y.domain([40, 100]);
+      x.domain(d3.extent(data, function(d) {
+       return d.date; }));
+      y.domain([40, 100]);
     	// y.domain(d3.extent(data, function(d) { return d.max; }));
 
     	svg.append("g")
-    		.attr("class", "x axis")
-    		.attr("transform", "translate(0," + height + ")")
-    		.call(xAxis);
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
 
-    	svg.append("g")
-    		.attr("class", "y axis")
-    		.call(yAxis)
-    		.append("text")
-    		.attr("transform", "rotate(-90)")
-    		.attr("y", -46)
-    		.attr("dy", ".71em")
-    		.style("text-anchor", "end")
-    		.text("Transition Rate (%)");
+      svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -46)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Transition Rate (%)");
 
-    	svg.append("path")
-    		.attr("class", "line")
-    		.attr("d", line(data));
+      svg.append("path")
+      .attr("class", "line")
+      .attr("d", line(data));
 
-        svg.append("path")
-            .attr("class", "line2")
-            .attr("d", line([]));
+      svg.append("path")
+      .attr("class", "line2")
+      .attr("d", line([]));
     }
 
 
     function updatechart(data, groupNo){
 
     	x.domain(d3.extent(data, function(d) {
-         return d.date; }));
-        y.domain([40, 100]);
+       return d.date; }));
+      y.domain([40, 100]);
 
-        if (groupNo == 1){
-            svg.select(".line")
-                .transition()
-                .duration(1000)
-                .attr("d", line(data));
-        } else {
-            svg.select(".line2")
-                .transition()
-                .duration(1000)
-                .attr("d", line(data));
-        }    	
+      if (groupNo == 1){
+        svg.select(".line")
+        .transition()
+        .duration(1000)
+        .attr("d", line(data));
+      } else {
+        svg.select(".line2")
+        .transition()
+        .duration(1000)
+        .attr("d", line(data));
+      }    	
 
          //Update X axis
     	    // svg.select(".x.axis")
@@ -415,47 +413,48 @@ psv("ProvG2G2012_2013.txt", function(alldat) {
     	    //     .duration(1000)
     	    //     .call(xAxis);
 
-    }
+        }
 
-    function brushed() {
+        function brushed() {
 
-        var value = brush.extent()[0];
+          var value = brush.extent()[0];
 
-        if (d3.event.sourceEvent) {
+          if (d3.event.sourceEvent) {
 
             value = Math.round(x1.invert(d3.mouse(this)[0]));
             brush.extent([value, value]);
+          }
+          handle.attr("cx", x1(value));
+
+          var brushDate = brushToyear(value-1);
+          current.year = brushDate;
+          group = $('#group').val();
+          group2 = $('#group2').val();
+
+          chartData1 = gatherdata(alldat, current.year,group)
+          chartData2 = gatherdata(alldat, current.year, group2)
+          updatechart(chartData1, 1)
+          updatechart(chartData2, 2)
+
         }
-        handle.attr("cx", x1(value));
-        
-        var brushDate = brushToyear(value-1);
-        current.year = brushDate;
-        group = $('#group').val();
-        group2 = $('#group2').val();
 
-        chartData1 = gatherdata(alldat, current.year,group)
-        chartData2 = gatherdata(alldat, current.year, group2)
-        updatechart(chartData1, 1)
-        updatechart(chartData2, 2)
 
-    }
-  
-
-    function gatherdata(datain, yearIn, group) {
-        var chartData = []
-        for (i = 0; i < alldat.length; i++) {
+        function gatherdata(datain, yearIn, group) {
+          // console.log(alldat[1].Year)
+          var chartData = []
+          for (i = 0; i < alldat.length; i++) {
             if (alldat[i].Grade == yearIn  && alldat[i].Group == group && alldat[i].district == "Greater Victoria"){
-                chartData.push({
-                    grade: alldat[i].Grade,
-                    date: alldat[i].Year,
-                    avg: Number(alldat[i].Perc)
-                })
+              chartData.push({
+                grade: alldat[i].Grade,
+                date: alldat[i].Year,
+                avg: Number(alldat[i].Perc)
+              })
             }
+          }
+          return chartData;
         }
-        return chartData;
-    }
 
-})
+      })
 
 
 
