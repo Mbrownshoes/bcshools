@@ -338,11 +338,49 @@
 
     var chartData = [];
 
+    var x = d3.time.scale()
+        .range([0, width]);
+
+    var y = d3.scale.linear()
+        .range([heightG, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var line = d3.svg.line()
+        .x(function(d) {
+            console.log(d.date)
+            return x(d.date);
+        })
+        .y(function(d) {
+            console.log(d.sz)
+            return y((d.sz));
+        });
+
+    var meanLine = d3.svg.line()
+        .x(function(d) {
+            return x(d.x);
+        })
+        .y(function(d) {
+            return y(d.y);
+        });
+    
+    svg = d3.select("#chart").append("svg")
+        .attr("width", widthG + 100 + margin.left + margin.right)
+        .attr("height", heightG + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
     function makeChart(d) {
         console.log(d.SCHOOL_NAME)
         "use strict";
         var data = {
-            resource_id: '68106e98-99f4-49f2-bcfb-d8093d77602d', // the resource id
+            resource_id: '68106e98-99f4-49f2-bcfb-d8093d77602d', // 
             limit: 1000, // get 5 results
             filters: '{"School Name":' + '"' + d.SCHOOL_NAME + '"' + '}'
         };
@@ -366,58 +404,8 @@
                 chartData.sort(function(a, b) {
                     return a.date - b.date;
                 });
-                // chartData = data.result.records
-                // // console.log(skull)
-                // chartData.forEach(function(d) {
-                //     d.Year = parseDate(d["School Year"].slice(3, 4) + " 06");
-                //     d.sz = d["Avg Class Size 1 3"];
-                // })
+
                 test = chartData
-
-                //setup graph but hide it.
-
-                // console.log(chartData)
-
-                var x = d3.time.scale()
-                    .range([0, width]);
-
-                var y = d3.scale.linear()
-                    .range([heightG, 0]);
-
-                var xAxis = d3.svg.axis()
-                    .scale(x)
-                    .orient("bottom");
-
-                var yAxis = d3.svg.axis()
-                    .scale(y)
-                    .orient("left");
-
-                var line = d3.svg.line()
-                    .x(function(d) {
-                        console.log(d.date)
-                        return x(d.date);
-                    })
-                    .y(function(d) {
-                        console.log(d.sz)
-                        return y((d.sz));
-                    });
-
-                var meanLine = d3.svg.line()
-                    .x(function(d) {
-                        return x(d.x);
-                    })
-                    .y(function(d) {
-                        return y(d.y);
-                    });
-
-
-
-                svg = d3.select("#chart").append("svg")
-                    .attr("width", widthG + 100 + margin.left + margin.right)
-                    .attr("height", heightG + margin.top + margin.bottom)
-                    .append("g")
-                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
 
                 y.domain(d3.extent(chartData, function(d) {
                     return d.sz;
@@ -446,31 +434,29 @@
                     .attr("class", "line")
                     .attr("d", line(chartData));
 
-                // var AvgLine = svg.append("g");
-
-                // AvgLine.append("path")
-                //     .attr("class", "line1")
-                //     .attr("d", meanLine(chartData));
-
-                // svg.selectAll("circle")
-                //     .data(chartData)
-                //     .enter()
-                //     .append("circle")
-                //     .attr("r", 3.5)
-                //     .attr("cx", function (d) {
-                //         return x(d.x);
-                //     })
-                //     .attr("cy", function (d) {
-                //         return y(d.y);
-                //     })
-                //     .style("fill", "rgb(214,39,40)");
-
             }
         })
     }
 
+    function updatechart(data){
+
+        x.domain(d3.extent(data, function(d) {
+            return d.date; }));
+        y.domain([40, 100]);
+
+        svg.select(".line")
+        .transition()
+        .duration(1000)
+        .attr("d", line(data));
+          
+
+         //Update X axis
+            // svg.select(".x.axis")
+               //  .transition()
+            //     .duration(1000)
+            //     .call(xAxis);
+
+    }
+
 </script>
 
-            <!-- </div> -->
-            <!-- </div>
-</div> -->
