@@ -81,6 +81,24 @@
         padding-left: 20px;
         font-size: 20px;
     }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+.x.axis path {
+  display: none;
+}
+
+    .line {
+  fill: none;
+  stroke: #1f77b4;
+  stroke-width: 1.5px;
+}
+
 </style>
 
 <body>
@@ -100,351 +118,356 @@
 
 <script>
     // d3.select("body")
-
     // var projection=d3.geo.albers()
     //  .rotate([96, 5]) 
     //     .center([-32, 58.5]) 
     //     .parallels([20, 60]) 
     //     .scale(1970) 
     //     .translate([width / 2, height / 2]);
-
-
-
     // d3.select(".map")
     //  .append("h3")
     //  .html("What is it?")
     //  .append("p")
     //  .html("Energy East is a proposed pipeline that would transport crude oil from the Alberta oil sands to refineries and ports in Eastern Canada.")
     //  .attr("class","g-summary")
+    var width = 900,
+        height = 700,
+        active = d3.select(null);
 
-var width = 900,
-    height = 700,
-    active = d3.select(null);
-
-var formatNumber = d3.format(",.0f");
-
-
-
-var path = d3.geo.path()
-    .projection(null);
-
-
-var zoom = d3.behavior.zoom()
-    .translate([0, 0])
-    .scale(1)
-    .scaleExtent([1, 8])
-    .on("zoom", zoomed);
-
-var svg = d3.select(".map")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .on("click", stopped, true);
-
-var radius = d3.scale.sqrt()
-    .domain([0, 1e6])
-    .range([0, 4]);
-
-var tooltip = d3.select(".map")
-    .append("div")
-    .attr("class", "tooltip");
-
-
-svg.append("rect")
-    .attr("class", "background")
-    .attr("width", width)
-    .attr("height", height)
-    .on("click", reset);
-
-var g = svg.append("g")
-
-svg
-    .call(zoom)
-    .call(zoom.event)
+    var formatNumber = d3.format(",.0f");
 
 
 
-d3.json("skulldist.json", function(error, BC) {
-    if (error) return console.error(error);
+    var path = d3.geo.path()
+        .projection(null);
 
 
-    g.append("g")
-        .attr("id", "provinces")
-        .selectAll("path")
-        .data(topojson.feature(BC, BC.objects.skulldist).features)
-        .enter()
-        .append("path")
-        .attr("d", path)
-        .attr("id", "prov-borders")
-        .on("click", clicked);
+    var zoom = d3.behavior.zoom()
+        .translate([0, 0])
+        .scale(1)
+        .scaleExtent([1, 8])
+        .on("zoom", zoomed);
 
-});
+    var svg = d3.select(".map")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", stopped, true);
 
-function clicked(d) {
-    g.selectAll([".bubble", ".aboriginal", ".legend_Pop"]).remove();
-    d3.select("h3").style("visibility", "hidden")
-
-    console.log(d.properties.zone)
-    dist_num = d.properties.zoneNum;
-    dist_name = d.properties.zone;
-
-    if (active.node() === this) return reset();
-    active.classed("active", false);
-    active = d3.select(this).classed("active", true);
-
-
-    var bounds = path.bounds(d),
-        dx = bounds[1][0] - bounds[0][0],
-        dy = bounds[1][1] - bounds[0][1],
-        x = (bounds[0][0] + bounds[1][0]) / 2,
-        y = (bounds[0][1] + bounds[1][1]) / 2,
-        scale = .6 / Math.max(dx / width, dy / height),
-        translate = [width / 2 - scale * x, height / 2 - scale * y];
-
-
-    svg.transition()
-        .duration(750)
-        .call(zoom.translate(translate).scale(scale).event);
-
+    var radius = d3.scale.sqrt()
+        .domain([0, 1e6])
+        .range([0, 4]);
 
     var tooltip = d3.select(".map")
         .append("div")
-        .style("position", "absolute")
-        .style("z-index", "10")
-        .style("visibility", "hidden")
-        .style("color", "#222")
-        .style("padding", "8px")
-        .style("background-color", "#fff")
-        .style("border-radius", "6px")
-        .style("font", "12 px sans-serif")
-        .text("tooltip");
+        .attr("class", "tooltip");
 
 
-    var data = {
-        resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
-        limit: 10000, // get 5 results
-        q: '2012/2013',
-        filters: '{"DISTRICT_NUMBER":' + dist_num + '}'
+    svg.append("rect")
+        .attr("class", "background")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", reset);
+
+    var g = svg.append("g")
+
+    svg
+        .call(zoom)
+        .call(zoom.event)
+
+
+
+    d3.json("skulldist.json", function(error, BC) {
+        if (error) return console.error(error);
+
+
+        g.append("g")
+            .attr("id", "provinces")
+            .selectAll("path")
+            .data(topojson.feature(BC, BC.objects.skulldist).features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .attr("id", "prov-borders")
+            .on("click", clicked);
+
+    });
+
+    function clicked(d) {
+        g.selectAll([".bubble", ".aboriginal", ".legend_Pop"]).remove();
+        d3.select("h3").style("visibility", "hidden")
+
+        console.log(d.properties.zone)
+        dist_num = d.properties.zoneNum;
+        dist_name = d.properties.zone;
+
+        if (active.node() === this) return reset();
+        active.classed("active", false);
+        active = d3.select(this).classed("active", true);
+
+
+        var bounds = path.bounds(d),
+            dx = bounds[1][0] - bounds[0][0],
+            dy = bounds[1][1] - bounds[0][1],
+            x = (bounds[0][0] + bounds[1][0]) / 2,
+            y = (bounds[0][1] + bounds[1][1]) / 2,
+            scale = .6 / Math.max(dx / width, dy / height),
+            translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+
+        svg.transition()
+            .duration(750)
+            .call(zoom.translate(translate).scale(scale).event);
+
+
+        var tooltip = d3.select(".map")
+            .append("div")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("color", "#222")
+            .style("padding", "8px")
+            .style("background-color", "#fff")
+            .style("border-radius", "6px")
+            .style("font", "12 px sans-serif")
+            .text("tooltip");
+
+
+        var data = {
+            resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
+            limit: 10000, // get 5 results
+            q: '2012/2013',
+            filters: '{"DISTRICT_NUMBER":' + dist_num + '}'
+        };
+
+        $.ajax({
+            url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
+            data: data,
+            dataType: 'jsonp',
+            success: function(data) {
+                scholLoc = data.result.records
+
+
+
+                var projection = d3.geo.albers()
+                    .rotate([96, 5])
+                    .center([-32, 58.5])
+                    .parallels([20, 60])
+                    .scale(1970)
+                    .translate([960 / 2, 600 / 2]);
+
+                g.append("g")
+                    .attr("class", "bubble")
+                    .selectAll("circle")
+                    .data(scholLoc)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d) {
+                        // console.log(d)
+                        // console.log(projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)]))
+                        return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[0];
+                    })
+                    .attr("cy", function(d) {
+                        return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[1];
+                    })
+                    .attr("r", 10)
+                    // })
+                    .on("mouseover", function(d) {
+                        console.log(d.SCHOOL_NAME)
+                        tooltip.text(d.SCHOOL_NAME);
+                        tooltip.style("visibility", "visible");
+                    })
+                    .on("mousemove", function() {
+                        return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX - 300) + "px");
+                    })
+                    .on("mouseout", function() {
+                        return tooltip.style("visibility", "hidden");
+                    })
+                    .on("click", function(d) {
+                        makeChart(d);
+                    });
+                // console.log(scholLoc)
+
+            }
+        })
+
+
     };
 
-    $.ajax({
-        url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
-        data: data,
-        dataType: 'jsonp',
-        success: function(data) {
-            scholLoc = data.result.records
-            test = scholLoc
+    function reset() {
+        active.classed("active", false);
+        active = d3.select(null);
 
+        svg.transition()
+            .duration(750)
+            .call(zoom.translate([0, 0]).scale(1).event);
 
+        d3.select("h3")
+            .transition()
+            .delay(750)
+            .style("visibility", "visible");
+    }
 
-            var projection = d3.geo.albers()
-                .rotate([96, 5])
-                .center([-32, 58.5])
-                .parallels([20, 60])
-                .scale(1970)
-                .translate([960 / 2, 600 / 2]);
+    function zoomed() {
+        g.style("stroke-width", 1 / d3.event.scale + "px");
+        g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 
-            g.append("g")
-                .attr("class", "bubble")
-                .selectAll("circle")
-                .data(scholLoc)
-                .enter()
-                .append("circle")
-                .attr("cx", function(d) {
-                    // console.log(d)
-                    // console.log(projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)]))
-                    return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[0];
-                })
-                .attr("cy", function(d) {
-                    return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[1];
-                })
-                .attr("r", 10)
-                // })
-                .on("mouseover", function(d) {
-                    console.log(d.SCHOOL_NAME)
-                    tooltip.text(d.SCHOOL_NAME);
-                    tooltip.style("visibility", "visible");
-                })
-                .on("mousemove", function() {
-                    return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX - 300) + "px");
-                })
-                .on("mouseout", function() {
-                    return tooltip.style("visibility", "hidden");
-                })
-                .on("click", function(d) {
-                    makeChart(d);
+        g.selectAll("circle")
+            .attr("r", 10 / d3.event.scale);
+    }
+
+    // If the drag behavior prevents the default click,
+    // also stop propagation so we don’t click-to-zoom.
+    function stopped() {
+        if (d3.event.defaultPrevented) d3.event.stopPropagation();
+    }
+
+    // Chart stuff
+
+    margin = {
+        top: 20,
+        right: 20,
+        bottom: 30,
+        left: 50
+    };
+
+    var widthG = 760 - margin.left - margin.right,
+        heightG = 400 - margin.top - margin.bottom;
+
+    var parseDate = d3.time.format("%y %m").parse;
+
+    var chartData = [];
+
+    function makeChart(d) {
+        console.log(d.SCHOOL_NAME)
+        "use strict";
+        var data = {
+            resource_id: '68106e98-99f4-49f2-bcfb-d8093d77602d', // the resource id
+            limit: 1000, // get 5 results
+            filters: '{"School Name":' + '"' + d.SCHOOL_NAME + '"' + '}'
+        };
+
+        $.ajax({
+            url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
+            data: data,
+            dataType: 'jsonp',
+            success: function(data) {
+                var chartData = []
+
+                for (i = 0; i < data.result.records.length; i++) {
+
+                    chartData.push({
+                        date: parseDate(data.result.records[i]["School Year"].slice(3, 4) + " 06"),
+                        sz: Number(data.result.records[i]["Avg Class Size 1 3"])
+                    })
+
+                }
+
+                chartData.sort(function(a, b) {
+                    return a.date - b.date;
                 });
-            // console.log(scholLoc)
+                // chartData = data.result.records
+                // // console.log(skull)
+                // chartData.forEach(function(d) {
+                //     d.Year = parseDate(d["School Year"].slice(3, 4) + " 06");
+                //     d.sz = d["Avg Class Size 1 3"];
+                // })
+                test = chartData
 
-        }
-    })
+                //setup graph but hide it.
+
+                // console.log(chartData)
+
+                var x = d3.time.scale()
+                    .range([0, width]);
+
+                var y = d3.scale.linear()
+                    .range([heightG, 0]);
+
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left");
+
+                var line = d3.svg.line()
+                    .x(function(d) {
+                        console.log(d.date)
+                        return x(d.date);
+                    })
+                    .y(function(d) {
+                        console.log(d.sz)
+                        return y((d.sz));
+                    });
+
+                var meanLine = d3.svg.line()
+                    .x(function(d) {
+                        return x(d.x);
+                    })
+                    .y(function(d) {
+                        return y(d.y);
+                    });
 
 
-};
 
-function reset() {
-    active.classed("active", false);
-    active = d3.select(null);
+                svg = d3.select("#chart").append("svg")
+                    .attr("width", widthG + 100 + margin.left + margin.right)
+                    .attr("height", heightG + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    svg.transition()
-        .duration(750)
-        .call(zoom.translate([0, 0]).scale(1).event);
 
-    d3.select("h3")
-        .transition()
-        .delay(750)
-        .style("visibility", "visible");
-}
+                y.domain(d3.extent(chartData, function(d) {
+                    return d.sz;
+                }));
 
-function zoomed() {
-    g.style("stroke-width", 1 / d3.event.scale + "px");
-    g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+                x.domain(d3.extent(chartData, function(d) {
+                    return d.date;
+                }));
 
-    g.selectAll("circle")
-        .attr("r", 10 / d3.event.scale);
-}
+                svg.append("g") //x axis group
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + heightG + ")")
+                    .call(xAxis);
 
-// If the drag behavior prevents the default click,
-// also stop propagation so we don’t click-to-zoom.
-function stopped() {
-    if (d3.event.defaultPrevented) d3.event.stopPropagation();
-}
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis)
+                    .append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", -46)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end")
+                    .text("Class size");
 
-// Chart stuff
+                svg.append("path")
+                    .attr("class", "line")
+                    .attr("d", line(chartData));
 
-margin = {
-    top: 20,
-    right: 20,
-    bottom: 30,
-    left: 50
-};
+                // var AvgLine = svg.append("g");
 
-var widthG = 760 / 2 - margin.left - margin.right,
-    heightG = 250 - margin.top - margin.bottom;
+                // AvgLine.append("path")
+                //     .attr("class", "line1")
+                //     .attr("d", meanLine(chartData));
 
-var parseDate = d3.time.format("%Y-%m-%d").parse;
+                // svg.selectAll("circle")
+                //     .data(chartData)
+                //     .enter()
+                //     .append("circle")
+                //     .attr("r", 3.5)
+                //     .attr("cx", function (d) {
+                //         return x(d.x);
+                //     })
+                //     .attr("cy", function (d) {
+                //         return y(d.y);
+                //     })
+                //     .style("fill", "rgb(214,39,40)");
 
-function makeChart(d) {
-    console.log(d.SCHOOL_NAME)
-    "use strict";
-    var data = {
-        resource_id: '68106e98-99f4-49f2-bcfb-d8093d77602d', // the resource id
-        limit: 1000, // get 5 results
-        filters: '{"School Name":"Jaffray Elem-Jr Secondary"}'
-    };
-
-    $.ajax({
-        url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
-        data: data,
-        dataType: 'jsonp',
-        success: function(data) {
-            console.log(data)
-            scholLoc = data.result.records
-            test = scholLoc
-        }
-    })
-
-//         var data = {
-//         resource_id: '3f51a664-efbf-4bd0-8a2d-256ca44c2271', // the resource id
-//         limit: 10000
-//         // filters: '{"School Name":"Jaffray Elem-Jr Secondary"}'
-//     };
-//     // console.log('{"School Name":'+'"'+d.SCHOOL_NAME+'"'+'}')
-// // filters: '{"DISTRICT_NUMBER":' + dist_num + '}'
-//     $.ajax({
-//         url: 'http://cat.data.gov.bc.ca/api/action/datastore_search',
-//         data: data,
-//         dataType: 'jsonp',
-//         success: function(data) {
-//             test = data
-//             console.log(data.result.records)
-//             // scholLoc = data
-//             // test = scholLoc
-//         }
-//     })
-    
-
-    //setup graph but hide it.
-
-    var chartData = d;
-    console.log(chartData)
-
-    var x = d3.time.scale()
-        .domain([d3.extent(chartData, function (d) {
-            return d.x;
-        })])
-        .range([0, widthG]);
-
-    var y = d3.scale.linear()
-        .range([heightG, 0]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .ticks(11)
-        .orient("bottom")
-        .tickFormat(d3.time.format("%b"));
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .ticks(5, ",.1")
-        .orient("left");
-
-    var line = d3.svg.line()
-        .interpolate("linear")
-        .x(function (d) {
-            return x(d.x);
+            }
         })
-        .y(function (d) {
-            return y(d.y);
-        });
-
-    var meanLine = d3.svg.line()
-        .x(function (d) {
-            return x(d.x);
-        })
-        .y(function (d) {
-            return y(d.y);
-        });
-
-                    
-
-    svg = d3.select("#chart").append("svg")
-        .attr("width", widthG + 100 + margin.left + margin.right)
-        .attr("height", heightG + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-    y.domain([0, 0]);
-
-    svg.append("g") //x axis group
-        .attr("class", "x axisC")
-        .attr("transform", "translate(0," + heightG + ")")
-        .call(xAxis);
-
-    svg.append("path")
-        .attr("class", "line")
-        .attr("d", line(chartData));
-
-    var AvgLine = svg.append("g");
-
-    AvgLine.append("path")
-        .attr("class", "line1")
-        .attr("d", meanLine(chartData));
-
-    svg.selectAll("circle")
-        .data(chartData)
-        .enter()
-        .append("circle")
-        .attr("r", 3.5)
-        .attr("cx", function (d) {
-            return x(d.x);
-        })
-        .attr("cy", function (d) {
-            return y(d.y);
-        })
-        .style("fill", "rgb(214,39,40)");
-}
+    }
 
 </script>
 
