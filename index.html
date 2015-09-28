@@ -89,15 +89,21 @@
       shape-rendering: crispEdges;
     }
 
-.x.axis path {
-  display: none;
-}
+    .x.axis path {
+      display: none;
+    }
 
-    .line {
-  fill: none;
-  stroke: #1f77b4;
-  stroke-width: 1.5px;
-}
+        .line {
+      fill: none;
+      stroke: #1f77b4;
+      stroke-width: 1.5px;
+    }
+
+    #chart_container {
+        position: absolute;
+        left:760px;
+        top:140px;
+    }
 
 </style>
 
@@ -240,14 +246,14 @@
             filters: '{"DISTRICT_NUMBER":' + dist_num + '}'
         };
 
+        var counter = 0;
+
         $.ajax({
             url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
             data: data,
             dataType: 'jsonp',
             success: function(data) {
                 scholLoc = data.result.records
-
-
 
                 var projection = d3.geo.albers()
                     .rotate([96, 5])
@@ -263,8 +269,6 @@
                     .enter()
                     .append("circle")
                     .attr("cx", function(d) {
-                        // console.log(d)
-                        // console.log(projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)]))
                         return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[0];
                     })
                     .attr("cy", function(d) {
@@ -284,9 +288,15 @@
                         return tooltip.style("visibility", "hidden");
                     })
                     .on("click", function(d) {
-                        makeChart(d);
+                        // if first time make if second update chart
+                        if (counter == 0){
+                            makeChart(d);
+                            counter += 1;
+                            console.log(counter)
+                        }else{
+                            updatechart(d);
+                        }                        
                     });
-                // console.log(scholLoc)
 
             }
         })
@@ -331,15 +341,15 @@
         left: 50
     };
 
-    var widthG = 760 - margin.left - margin.right,
-        heightG = 400 - margin.top - margin.bottom;
+    var widthG = 760 /2 - margin.left - margin.right,
+        heightG = 250 - margin.top - margin.bottom;
 
     var parseDate = d3.time.format("%y %m").parse;
 
     var chartData = [];
 
     var x = d3.time.scale()
-        .range([0, width]);
+        .range([0, widthG]);
 
     var y = d3.scale.linear()
         .range([heightG, 0]);
@@ -438,23 +448,56 @@
         })
     }
 
-    function updatechart(data){
+    function updatechart(d){
+        console.log(d.SCHOOL_NAME)
+        "use strict";
+        var data = {
+            resource_id: '68106e98-99f4-49f2-bcfb-d8093d77602d', // 
+            limit: 1000, // get 5 results
+            filters: '{"School Name":' + '"' + d.SCHOOL_NAME + '"' + '}'
+        };
 
-        x.domain(d3.extent(data, function(d) {
-            return d.date; }));
-        y.domain([40, 100]);
+        $.ajax({
+            url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
+            data: data,
+            dataType: 'jsonp',
+            success: function(data) {
+                var chartData = []
+
+                for (i = 0; i < data.result.records.length; i++) {
+
+                    chartData.push({
+                        date: parseDate(data.result.records[i]["School Year"].slice(3, 4) + " 06"),
+                        sz: Number(data.result.records[i]["Avg Class Size 1 3"])
+                    })
+
+                }
+
+                chartData.sort(function(a, b) {
+                    return a.date - b.date;
+                });
+
+                y.domain(d3.extent(chartData, function(d) {
+                    return d.sz;
+                }));
+
+                x.domain(d3.extent(chartData, function(d) {
+                    return d.date;
+                }));
 
         svg.select(".line")
-        .transition()
-        .duration(1000)
-        .attr("d", line(data));
-          
+            .transition()
+            .duration(1000)
+            .attr("d", line(chartData));
+              
 
          //Update X axis
             // svg.select(".x.axis")
                //  .transition()
             //     .duration(1000)
             //     .call(xAxis);
+        }
+    })
 
     }
 
