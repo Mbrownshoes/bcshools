@@ -89,9 +89,9 @@
       shape-rendering: crispEdges;
     }
 
-    .x.axis path {
+ /*   .x.axis path {
       display: none;
-    }
+    }*/
 
         .line {
       fill: none;
@@ -391,7 +391,7 @@
         "use strict";
         var data = {
             resource_id: '68106e98-99f4-49f2-bcfb-d8093d77602d', // 
-            limit: 1000, // get 5 results
+            limit: 100, // get 5 results
             filters: '{"School Name":' + '"' + d.SCHOOL_NAME + '"' + '}'
         };
 
@@ -400,12 +400,13 @@
             data: data,
             dataType: 'jsonp',
             success: function(data) {
+                console.log(data)
                 var chartData = []
 
                 for (i = 0; i < data.result.records.length; i++) {
 
                     chartData.push({
-                        date: parseDate(data.result.records[i]["School Year"].slice(3, 4) + " 06"),
+                        date: parseDate(data.result.records[i]["School Year"].slice(2, 4) + " 06"),
                         sz: Number(data.result.records[i]["Avg Class Size 1 3"])
                     })
 
