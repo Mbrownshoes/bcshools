@@ -243,7 +243,7 @@
             resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
             limit: 10000, // get 5 results
             q: '2012/2013',
-            filters: '{"DISTRICT_NUMBER":' + dist_num + '}'
+            filters: '{"DISTRICT_NUMBER":' + dist_num + ',"HAS_ELEMENTARY_GRADES_FLAG": "TRUE"}'
         };
 
         var counter = 0;
@@ -254,6 +254,7 @@
             dataType: 'jsonp',
             success: function(data) {
                 scholLoc = data.result.records
+                console.log(scholLoc)
 
                 var projection = d3.geo.albers()
                     .rotate([96, 5])
