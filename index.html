@@ -93,10 +93,16 @@
       display: none;
     }*/
 
-        .line {
-      fill: none;
-      stroke: #1f77b4;
-      stroke-width: 1.5px;
+    .line {
+        fill: none;
+        stroke: #1f77b4;
+        stroke-width: 1.5px;
+    }
+
+    .line1 {
+        fill: none;
+        stroke: #ddd;
+        stroke-width: 1.5px;
     }
 
     #chart_container {
@@ -358,7 +364,8 @@
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom");
+        .orient("bottom")
+        .ticks(4);
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -366,21 +373,15 @@
 
     var line = d3.svg.line()
         .x(function(d) {
-            console.log(d.date)
+            // console.log(d.date)
             return x(d.date);
         })
         .y(function(d) {
             console.log(d.sz)
-            return y((d.sz));
+            return y(d.sz);
         });
 
-    var meanLine = d3.svg.line()
-        .x(function(d) {
-            return x(d.x);
-        })
-        .y(function(d) {
-            return y(d.y);
-        });
+    var meanLine;
     
     svg = d3.select("#chart").append("svg")
         .attr("width", widthG + 100 + margin.left + margin.right)
@@ -407,7 +408,7 @@
                 for (i = 0; i < data.result.records.length; i++) {
 
                     chartData.push({
-                        date: parseDate(data.result.records[i]["School Year"].slice(2, 4) + " 06"),
+                        date: parseDate(data.result.records[i]["School Year"].slice(2, 4) + " 01"),
                         sz: Number(data.result.records[i]["Avg Class Size 1 3"])
                     })
 
@@ -417,17 +418,29 @@
                     return a.date - b.date;
                 });
 
-                test = chartData
-
-                y.domain(d3.extent(chartData, function(d) {
+                var dataSum = d3.sum(chartData, function (d) {
+                    // console.log(d.sz)
                     return d.sz;
-                }));
+                });
+             
+
+                meanLine = d3.svg.line()
+                    .x(function(d) {
+                        return x(d.date);
+                    })
+                    .y(function(d) {
+                        return y(dataSum/chartData.length);
+                    });
+
+                y.domain([0,30]);
 
                 x.domain(d3.extent(chartData, function(d) {
                     return d.date;
                 }));
 
                 console.log(chartData)
+
+
 
                 svg.append("g") //x axis group
                     .attr("class", "x axis")
@@ -447,6 +460,26 @@
                 svg.append("path")
                     .attr("class", "line")
                     .attr("d", line(chartData));
+
+                AvgLine = svg.append("g");
+
+                AvgLine.append("path")
+                    .attr("class", "line1")
+                    .attr("d", meanLine(chartData));
+
+                svg.selectAll("circle")
+                    .data(chartData)
+                    .enter()
+                    .append("circle")
+                    .attr("r", 3.5)
+                    .attr("cx", function (d) {
+                        return x(d.date);
+                    })
+                    .attr("cy", function (d) {
+                        return y(d.sz);
+                    })
+                    .style("fill", "rgb(214,39,40)");
+
 
             }
         })
@@ -480,28 +513,59 @@
                     return a.date - b.date;
                 });
 
-                y.domain(d3.extent(chartData, function(d) {
-                    return d.sz;
-                }));
+                // y.domain(d3.extent(chartData, function(d) {
+                //     return d.sz;
+                // }));
 
                 x.domain(d3.extent(chartData, function(d) {
                     // console.log(d.date)
                     return d.date;
                 }));
 
-                console.log(chartData)
+                var dataSum = d3.sum(chartData, function (d) {
+                    // console.log(d.sz)
+                    return d.sz;
+                });
 
+                meanLine = d3.svg.line()
+                    .x(function(d) {
+                        return x(d.date);
+                    })
+                    .y(function(d) {
+                        return y(dataSum/chartData.length);
+                    });
+
+        //transitions
         svg.select(".line")
             .transition()
             .duration(1000)
             .attr("d", line(chartData));
-              
+
+        AvgLine.selectAll("path")
+            .transition()
+            .duration(1000)
+            .attr("d", meanLine(chartData));
+
+        svg.selectAll("circle")
+        .data(chartData)
+            .transition()
+            .duration(1000)
+            .attr("r", 3.5)
+            .attr("cx", function (d) {
+                // console.log(d)
+                return x(d.date);
+            })
+            .attr("cy", function (d) {
+                return y(d.sz);
+            })
+            .style("fill", "rgb(214,39,40)");
+          
 
          // Update X axis
-            // svg.select(".x.axis")
+            // svg.select(".y.axis")
             //     .transition()
             //     .duration(1000)
-            //     .call(xAxis);
+            //     .call(yAxis);
         }
     })
 
