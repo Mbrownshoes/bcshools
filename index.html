@@ -56,8 +56,8 @@
         stroke-width: .01px;
     }
     
-    .bubble:hover {
-        stroke: #000;
+    .bubble :hover {
+    stroke: #000;
     }
     
     .legend_Pop circle {
@@ -130,7 +130,7 @@
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
-
+<h1>BC Schools Class Size</h1>
 <div class="btn-group" role="group" aria-label="...">
 <h4>Grades</h4>
   <button type="button" class="btn btn-default">1 - 3</button>
@@ -140,7 +140,7 @@
 </div>
 
 
-<h1>BC Schools Class Size</h1>
+
 <!-- <p id="intro">Click on a region.</p> -->
 <p class="map" id="map">
 
@@ -149,19 +149,7 @@
 </div>
 
 <script>
-    // d3.select("body")
-    // var projection=d3.geo.albers()
-    //  .rotate([96, 5]) 
-    //     .center([-32, 58.5]) 
-    //     .parallels([20, 60]) 
-    //     .scale(1970) 
-    //     .translate([width / 2, height / 2]);
-    // d3.select(".map")
-    //  .append("h3")
-    //  .html("What is it?")
-    //  .append("p")
-    //  .html("Energy East is a proposed pipeline that would transport crude oil from the Alberta oil sands to refineries and ports in Eastern Canada.")
-    //  .attr("class","g-summary")
+ 
     var width = 900,
         height = 700,
         active = d3.select(null);
@@ -229,8 +217,8 @@
     var counter = 0;
 
     function clicked(d) {
-        g.selectAll([".bubble", ".aboriginal", ".legend_Pop"]).remove();
-        d3.select("h3").style("visibility", "hidden")
+        g.selectAll([".bubble"]).remove();
+        // d3.select("h3").style("visibility", "hidden")
 
         console.log(d.properties.zone)
         dist_num = d.properties.zoneNum;
@@ -272,7 +260,7 @@
             resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
             limit: 10000, // get 5 results
             q: '2012/2013',
-            filters: '{"DISTRICT_NUMBER":' + dist_num + ',"HAS_ELEMENTARY_GRADES_FLAG": "TRUE"}'
+            filters: '{"DISTRICT_NUMBER":' + dist_num + ',"ORGANIZATION_EDUCATION_LEVEL": "ELEMENTARY"}'
         };
 
         
