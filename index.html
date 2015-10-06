@@ -249,9 +249,8 @@
         var counter = 0;
 
         $.ajax({
-            url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
+            url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
             data: data,
-            dataType: 'jsonp',
             success: function(data) {
                 scholLoc = data.result.records
 
@@ -396,9 +395,8 @@
         };
 
         $.ajax({
-            url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
+            url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
             data: data,
-            dataType: 'jsonp',
             success: function(data) {
                 console.log(data)
                 var chartData = []
@@ -459,9 +457,8 @@
         };
 
         $.ajax({
-            url: 'http://catalogue.data.gov.bc.ca/api/action/datastore_search',
+            url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
             data: data,
-            dataType: 'jsonp',
             success: function(data) {
                 var chartData = []
 
