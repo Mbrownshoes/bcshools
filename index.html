@@ -101,7 +101,7 @@
 
     #chart_container {
         position: absolute;
-        left:760px;
+        left:920px;
         top:140px;
     }
 
@@ -199,6 +199,8 @@
 
     });
 
+    var counter = 0;
+
     function clicked(d) {
         g.selectAll([".bubble", ".aboriginal", ".legend_Pop"]).remove();
         d3.select("h3").style("visibility", "hidden")
@@ -243,16 +245,17 @@
             resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
             limit: 10000, // get 5 results
             q: '2012/2013',
-            filters: '{"DISTRICT_NUMBER":' + dist_num + '}'
+            filters: '{"DISTRICT_NUMBER":' + dist_num + ',"HAS_ELEMENTARY_GRADES_FLAG": "TRUE"}'
         };
 
-        var counter = 0;
+        
 
         $.ajax({
             url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
             data: data,
             success: function(data) {
                 scholLoc = data.result.records
+                console.log(scholLoc)
 
                 var projection = d3.geo.albers()
                     .rotate([96, 5])
@@ -424,6 +427,8 @@
                     return d.date;
                 }));
 
+                console.log(chartData)
+
                 svg.append("g") //x axis group
                     .attr("class", "x axis")
                     .attr("transform", "translate(0," + heightG + ")")
@@ -434,7 +439,7 @@
                     .call(yAxis)
                     .append("text")
                     .attr("transform", "rotate(-90)")
-                    .attr("y", -46)
+                    .attr("y", -48)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
                     .text("Class size");
@@ -465,7 +470,7 @@
                 for (i = 0; i < data.result.records.length; i++) {
 
                     chartData.push({
-                        date: parseDate(data.result.records[i]["School Year"].slice(3, 4) + " 06"),
+                        date: parseDate(data.result.records[i]["School Year"].slice(2, 4) + " 06"),
                         sz: Number(data.result.records[i]["Avg Class Size 1 3"])
                     })
 
@@ -480,8 +485,11 @@
                 }));
 
                 x.domain(d3.extent(chartData, function(d) {
+                    // console.log(d.date)
                     return d.date;
                 }));
+
+                console.log(chartData)
 
         svg.select(".line")
             .transition()
@@ -489,9 +497,9 @@
             .attr("d", line(chartData));
               
 
-         //Update X axis
+         // Update X axis
             // svg.select(".x.axis")
-               //  .transition()
+            //     .transition()
             //     .duration(1000)
             //     .call(xAxis);
         }
