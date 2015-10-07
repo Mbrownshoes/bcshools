@@ -96,7 +96,7 @@
     .line {
         fill: none;
         stroke: #1f77b4;
-        stroke-width: 1.5px;
+        stroke-width: 3px;
     }
 
     .line1 {
@@ -130,13 +130,12 @@
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
-<h1>BC Schools Class Size</h1>
+<h1>BC Elementary Schools Class Size</h1>
 <div class="btn-group" role="group" aria-label="...">
-<h4>Grades</h4>
-  <button type="button" class="btn btn-default">K</button>
-  <button type="button" class="btn btn-default">1 - 3</button>
-  <button type="button" class="btn btn-default">4 - 7</button>
-
+    <h4>Grades</h4>
+    <button type="button" class="btn btn-default" value="Avg Class Size K" >K</button>
+    <button type="button" class="btn btn-default" value="Avg Class Size 1 3">1 - 3</button>
+    <button type="button" class="btn btn-default" value="Avg Class Size 4 7" >4 - 7</button>
 </div>
 
 
@@ -215,6 +214,7 @@
     });
 
     var counter = 0;
+    var currentSchool, grade;
 
     function clicked(d) {
         g.selectAll([".bubble"]).remove();
@@ -305,13 +305,16 @@
                         return tooltip.style("visibility", "hidden");
                     })
                     .on("click", function(d) {
+                        currentSchool = d;
                         // if first time make if second update chart
                         if (counter == 0){
-                            makeChart(d);
+                            grade = "Avg Class Size 1 3"
+                            makeChart(d,grade);
                             counter += 1;
                             console.log(counter)
                         }else{
-                            updatechart(d);
+                            console.log('this is the grade: '+ grade)
+                            updatechart(d,grade);
                         }                        
                     });
 
@@ -398,7 +401,7 @@
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    function makeChart(d) {
+    function makeChart(d,grade) {
 
         console.log(d.SCHOOL_NAME)
         "use strict";
@@ -419,7 +422,7 @@
 
                     chartData.push({
                         date: parseDate(data.result.records[i]["School Year"].slice(2, 4) + " 01"),
-                        sz: Number(data.result.records[i]["Avg Class Size 1 3"])
+                        sz: Number(data.result.records[i][grade])
                     })
 
                 }
@@ -508,8 +511,17 @@
 
     }
 
-    function updatechart(d){
+
+    $('.btn').bind("click", function(event) {
+        event.preventDefault();
+        grade = $(this).attr("value")
+        console.log(grade)
+        updatechart(currentSchool,grade)
+    })
+
+    function updatechart(d,grade){
         console.log(d.SCHOOL_NAME)
+        console.log(grade)
         "use strict";
         var data = {
             resource_id: '68106e98-99f4-49f2-bcfb-d8093d77602d', // 
@@ -528,7 +540,7 @@
 
                     chartData.push({
                         date: parseDate(data.result.records[i]["School Year"].slice(2, 4) + " 06"),
-                        sz: Number(data.result.records[i]["Avg Class Size 1 3"])
+                        sz: Number(data.result.records[i][grade])
                     })
 
                 }
