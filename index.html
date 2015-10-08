@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <met charset="utf-8">
 
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+
 <link rel="stylesheet" href="main.css">
 <style>
     body {
@@ -112,9 +121,9 @@
         top:140px;
     }
 
-    .btn-group{
-        left:970px;
-        top:390px;
+    #grades{
+        left:950px;
+        top:360px;
 
     }
 
@@ -125,6 +134,12 @@
 
     }
 
+    #distid {
+    padding-left:400px;
+    margin-bottom: -50px;
+    }
+
+
 </style>
 
 <body>
@@ -132,14 +147,30 @@
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
-<h1>BC Elementary Schools Class Size</h1>
-<div class="btn-group" role="group" aria-label="...">
-    <div class="container">
-    <h4>Grades</h4>
-    <button type="button" id="k" class="btn btn-default" value="Avg Class Size K" >K</button>
-    <button type="button" id = "oneThree" class=" active btn btn-default" value="Avg Class Size 1 3" >1 - 3</button>
-    <button type="button" class="btn btn-default" value="Avg Class Size 4 7" >4 - 7</button>
+<h1>BC Schools Class Size</h1>
+
+<!-- Single button -->
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Elementary
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu stuff" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Elementary</a></li>
+    <li><a href="#">Middle School</a></li>
+    <li><a href="#">Junior Secondary</a></li>
+    <li><a href="#">Secondary</a></li>
+  </ul>
 </div>
+<h2 id="distid"> </h2>
+<div class="btn-group" id="grades" role="group" aria-label="...">
+<!--     <div class="container"> -->
+    <h4>Grades</h4>
+    <button type="button"  class="btn btn-info" value="Avg Class Size K" >K</button>
+    <button type="button" class=" active btn btn-info" value="Avg Class Size 1 3" >1 - 3</button>
+    <button type="button" class="btn btn-info" value="Avg Class Size 4 7" >4 - 7</button>
+    <button type="button" class="btn btn-info" value="Avg Class Size 8 12" >8 - 12</button>
+<!--     </div> -->
 </div>
 
 
@@ -152,7 +183,20 @@
 </div>
 
 <script>
- 
+
+ var level = "ELEMENTARY"
+
+$(".stuff li > a").click( function() {
+    
+    level = $(this).text().toUpperCase()
+    console.log(level)
+    $(".btn:first-child").html($(this).text()+' <span class="caret"></span>');
+    $(".btn:first-child").val($(this).text());
+    // currentDist = []
+    updateSchoolLevel(currentDist,level);
+});
+
+
     var width = 900,
         height = 700,
         active = d3.select(null);
@@ -198,7 +242,8 @@
         .call(zoom)
         .call(zoom.event)
 
-    d3.select(".btn-group").style("visibility","hidden")
+    d3.select("#grades").style("visibility","hidden")
+    d3.select("#distid").style("visibility","hidden")
 
     d3.json("skulldist.json", function(error, BC) {
         if (error) return console.error(error);
@@ -218,9 +263,28 @@
     });
 
     var counter = 0;
-    var currentSchool, grade;
+    var currentSchool,grade,currentDist;
 
     function clicked(d) {
+
+        d3.select("#distid").style("visibility","visible")
+        .transition()
+            .delay(200)
+            .text(d.properties.zone);
+            // $("#distid").text(d.properties.zone);
+
+ // var disttext = svg.append("text")
+ //            .transition()
+ //            .delay(200)
+ //            .attr("x", (width / 4))             
+ //            .attr("y", 0 - (margin.top / 2))
+ //            .attr("text-anchor", "middle")  
+ //            .style("font-size", "16px") 
+ //            .text(d.properties.zone);
+
+        currentDist = d;
+        // console.log(currentDist)
+
         g.selectAll([".bubble"]).remove();
         // d3.select("h3").style("visibility", "hidden")
 
@@ -263,8 +327,113 @@
         var data = {
             resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
             limit: 10000, // get 5 results
+            q: '2013/2014',
+            filters: '{"DISTRICT_NUMBER":' + dist_num + ',"ORGANIZATION_EDUCATION_LEVEL":"' + level + '"}'
+        };
+      
+
+        $.ajax({
+            url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
+            data: data,
+            success: function(data) {
+                scholLoc = data.result.records
+                // console.log(scholLoc)
+
+                var projection = d3.geo.albers()
+                    .rotate([96, 5])
+                    .center([-32, 58.5])
+                    .parallels([20, 60])
+                    .scale(1970)
+                    .translate([960 / 2, 600 / 2]);
+
+                g.append("g")
+                    .attr("class", "bubble")
+                    .selectAll("circle")
+                    .data(scholLoc)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d) {
+                        return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[0];
+                    })
+                    .attr("cy", function(d) {
+                        return projection([Number(d.SCHOOL_LONGITUDE), Number(d.SCHOOL_LATITUDE)])[1];
+                    })
+                    .attr("r", 10)
+                    // })
+                    .on("mouseover", function(d) {
+                        console.log(d.SCHOOL_NAME)
+                        tooltip.text(d.SCHOOL_NAME);
+                        tooltip.style("visibility", "visible");
+                    })
+                    .on("mousemove", function() {
+                        return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX - 300) + "px");
+                    })
+                    .on("mouseout", function() {
+                        return tooltip.style("visibility", "hidden");
+                    })
+                    .on("click", function(d) {
+                        currentSchool = d;
+                        // if first time make if second update chart
+                        if (counter == 0){
+                            grade = "Avg Class Size 1 3"
+                            makeChart(d,grade);
+                            counter += 1;
+                            console.log(counter)
+                        }else{
+                            console.log('this is the grade: '+ grade)
+                            updatechart(d,grade);
+                        }                        
+                    });
+
+            }
+        })
+
+
+    };
+
+
+    function updateSchoolLevel(currentDist,level){
+
+        g.selectAll([".bubble"]).remove();
+        console.log(currentDist)
+        dist_num = currentDist.properties.zoneNum;
+
+        // if (active.node() === this) return reset();
+        // active.classed("active", false);
+        // active = d3.select(this).classed("active", true);
+
+
+        var bounds = path.bounds(currentDist),
+            dx = bounds[1][0] - bounds[0][0],
+            dy = bounds[1][1] - bounds[0][1],
+            x = (bounds[0][0] + bounds[1][0]) / 2,
+            y = (bounds[0][1] + bounds[1][1]) / 2,
+            scale = .6 / Math.max(dx / width, dy / height),
+            translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+
+        svg.transition()
+            .duration(750)
+            .call(zoom.translate(translate).scale(scale).event);
+
+
+        var tooltip = d3.select(".map")
+            .append("div")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("color", "#222")
+            .style("padding", "8px")
+            .style("background-color", "#fff")
+            .style("border-radius", "6px")
+            .style("font", "12 px sans-serif")
+            .text("tooltip");
+
+        var data = {
+            resource_id: 'e58d2735-6d56-4223-8051-f59924ae5fd9', // the resource id
+            limit: 10000, // get 5 results
             q: '2012/2013',
-            filters: '{"DISTRICT_NUMBER":' + dist_num + ',"ORGANIZATION_EDUCATION_LEVEL": "ELEMENTARY"}'
+            filters: '{"DISTRICT_NUMBER":' + dist_num + ',"ORGANIZATION_EDUCATION_LEVEL":"' + level + '"}'
         };
 
         
@@ -325,8 +494,7 @@
             }
         })
 
-
-    };
+    }
 
     function reset() {
         active.classed("active", false);
@@ -419,7 +587,7 @@
             url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
             data: data,
             success: function(data) {
-                // console.log(data)
+                test = data
                 var chartData = []
 
                 for (i = 0; i < data.result.records.length; i++) {
@@ -484,24 +652,24 @@
                     .attr("class", "line1")
                     .attr("d", meanLine(chartData));
 
-                svg.selectAll("circle")
-                    .data(chartData)
-                    .enter()
-                    .append("circle")
-                    .attr("r", 3.5)
-                    .attr("cx", function (d) {
-                        return x(d.date);
-                    })
-                    .attr("cy", function (d) {
-                        return y(d.sz);
-                    })
-                    .style("fill", "rgb(214,39,40)");
+                // svg.selectAll("circle")
+                //     .data(chartData)
+                //     .enter()
+                //     .append("circle")
+                //     .attr("r", 3.5)
+                //     .attr("cx", function (d) {
+                //         return x(d.date);
+                //     })
+                //     .attr("cy", function (d) {
+                //         return y(d.sz);
+                //     })
+                //     .style("fill", "rgb(214,39,40)");
 
 
             }
         })
 
-        d3.select(".btn-group").transition()
+        d3.select("#grades").transition()
             .delay(200).style("visibility","visible")
 
         var schooltext = svg.append("text")
@@ -516,7 +684,7 @@
     }
 
 
-    $('.btn').bind("click", function(event) {
+    $('.btn-info').bind("click", function(event) {
         // $('#oneThree').removeClass("active")
         // $(this).prev().removeClass("active")
         event.preventDefault();
@@ -591,19 +759,19 @@
                     .duration(1000)
                     .attr("d", meanLine(chartData));
 
-                svg.selectAll("circle")
-                    .data(chartData)
-                    .transition()
-                    .duration(1000)
-                    .attr("r", 3.5)
-                    .attr("cx", function (d) {
-                        // console.log(d)
-                        return x(d.date);
-                    })
-                    .attr("cy", function (d) {
-                        return y(d.sz);
-                    })
-                    .style("fill", "rgb(214,39,40)");
+                // svg.selectAll("circle")
+                //     .data(chartData)
+                //     .transition()
+                //     .duration(1000)
+                //     .attr("r", 3.5)
+                //     .attr("cx", function (d) {
+                //         // console.log(d)
+                //         return x(d.date);
+                //     })
+                //     .attr("cy", function (d) {
+                //         return y(d.sz);
+                //     })
+                //     .style("fill", "rgb(214,39,40)");
           
 
          // Update X axis
