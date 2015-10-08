@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <met charset="utf-8">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
 <link rel="stylesheet" href="main.css">
 <style>
     body {
@@ -111,9 +119,9 @@
         top:140px;
     }
 
-    .btn-group{
-        left:970px;
-        top:390px;
+    #grades{
+        left:660px;
+        top:360px;
 
     }
 
@@ -131,14 +139,21 @@
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
-<h1>BC Elementary Schools Class Size</h1>
+<h1>BC Schools Class Size</h1>
+
 <div class="btn-group" role="group" aria-label="...">
-    <div class="container">
-    <h4>Grades</h4>
-    <button type="button" id="k" class="btn btn-default" value="Avg Class Size K" >K</button>
-    <button type="button" id = "oneThree" class=" active btn btn-default" value="Avg Class Size 1 3" >1 - 3</button>
-    <button type="button" class="btn btn-default" value="Avg Class Size 4 7" >4 - 7</button>
+  <button type="button" class="btn btn-default">Elementary</button>
+  <button type="button" class="btn btn-default">Jr. Secondary</button>
+  <button type="button" class="btn btn-default">Secondary</button>
 </div>
+
+<div class="btn-group" id="grades" role="group" aria-label="...">
+<!--     <div class="container"> -->
+    <h4>Grades</h4>
+    <button type="button"  class="btn btn-info" value="Avg Class Size K" >K</button>
+    <button type="button" class=" active btn btn-info" value="Avg Class Size 1 3" >1 - 3</button>
+    <button type="button" class="btn btn-info" value="Avg Class Size 4 7" >4 - 7</button>
+<!--     </div> -->
 </div>
 
 
@@ -197,7 +212,7 @@
         .call(zoom)
         .call(zoom.event)
 
-    d3.select(".btn-group").style("visibility","hidden")
+    d3.select("#grades").style("visibility","hidden")
 
     d3.json("skulldist.json", function(error, BC) {
         if (error) return console.error(error);
@@ -500,7 +515,7 @@
             }
         })
 
-        d3.select(".btn-group").transition()
+        d3.select("#grades").transition()
             .delay(200).style("visibility","visible")
 
         var schooltext = svg.append("text")
