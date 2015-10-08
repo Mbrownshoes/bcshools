@@ -120,7 +120,7 @@
     }
 
     #grades{
-        left:660px;
+        left:860px;
         top:360px;
 
     }
@@ -141,10 +141,17 @@
 
 <h1>BC Schools Class Size</h1>
 
-<div class="btn-group" role="group" aria-label="...">
-  <button type="button" class="btn btn-default">Elementary</button>
-  <button type="button" class="btn btn-default">Jr. Secondary</button>
-  <button type="button" class="btn btn-default">Secondary</button>
+<!-- Single button -->
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Elementary
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu stuff" aria-labelledby="dropdownMenu1">
+    <li><a href="#">Elementary</a></li>
+    <li><a href="#">Middle</a></li>
+    <li><a href="#">Jr. Secondary</a></li>
+  </ul>
 </div>
 
 <div class="btn-group" id="grades" role="group" aria-label="...">
@@ -167,6 +174,13 @@
 
 <script>
  
+$(".stuff li > a").click( function() {
+    console.log($(this).text())
+    $(".btn:first-child").html($(this).text()+' <span class="caret"></span>');
+     $(".btn:first-child").val($(this).text());
+});
+
+
     var width = 900,
         height = 700,
         active = d3.select(null);
@@ -530,7 +544,7 @@
     }
 
 
-    $('.btn').bind("click", function(event) {
+    $('.btn-info').bind("click", function(event) {
         // $('#oneThree').removeClass("active")
         // $(this).prev().removeClass("active")
         event.preventDefault();
