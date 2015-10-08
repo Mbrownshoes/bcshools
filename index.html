@@ -120,7 +120,7 @@
     }
 
     #grades{
-        left:860px;
+        left:950px;
         top:360px;
 
     }
@@ -131,6 +131,12 @@
         top:390px;
 
     }
+
+    #distid {
+    padding-left:400px;
+    margin-bottom: -50px;
+    }
+
 
 </style>
 
@@ -150,11 +156,11 @@
   <ul class="dropdown-menu stuff" aria-labelledby="dropdownMenu1">
     <li><a href="#">Elementary</a></li>
     <li><a href="#">Middle School</a></li>
-    <li><a href="#">Jr. Secondary</a></li>
+    <li><a href="#">Junior Secondary</a></li>
     <li><a href="#">Secondary</a></li>
   </ul>
 </div>
-
+<h2 id="distid"> </h2>
 <div class="btn-group" id="grades" role="group" aria-label="...">
 <!--     <div class="container"> -->
     <h4>Grades</h4>
@@ -235,6 +241,7 @@ $(".stuff li > a").click( function() {
         .call(zoom.event)
 
     d3.select("#grades").style("visibility","hidden")
+    d3.select("#distid").style("visibility","hidden")
 
     d3.json("skulldist.json", function(error, BC) {
         if (error) return console.error(error);
@@ -257,8 +264,24 @@ $(".stuff li > a").click( function() {
     var currentSchool,grade,currentDist;
 
     function clicked(d) {
+
+        d3.select("#distid").style("visibility","visible")
+        .transition()
+            .delay(200)
+            .text(d.properties.zone);
+            // $("#distid").text(d.properties.zone);
+
+ // var disttext = svg.append("text")
+ //            .transition()
+ //            .delay(200)
+ //            .attr("x", (width / 4))             
+ //            .attr("y", 0 - (margin.top / 2))
+ //            .attr("text-anchor", "middle")  
+ //            .style("font-size", "16px") 
+ //            .text(d.properties.zone);
+
         currentDist = d;
-        console.log(currentDist)
+        // console.log(currentDist)
 
         g.selectAll([".bubble"]).remove();
         // d3.select("h3").style("visibility", "hidden")
@@ -312,7 +335,7 @@ $(".stuff li > a").click( function() {
             data: data,
             success: function(data) {
                 scholLoc = data.result.records
-                console.log(scholLoc)
+                // console.log(scholLoc)
 
                 var projection = d3.geo.albers()
                     .rotate([96, 5])
@@ -627,18 +650,18 @@ $(".stuff li > a").click( function() {
                     .attr("class", "line1")
                     .attr("d", meanLine(chartData));
 
-                svg.selectAll("circle")
-                    .data(chartData)
-                    .enter()
-                    .append("circle")
-                    .attr("r", 3.5)
-                    .attr("cx", function (d) {
-                        return x(d.date);
-                    })
-                    .attr("cy", function (d) {
-                        return y(d.sz);
-                    })
-                    .style("fill", "rgb(214,39,40)");
+                // svg.selectAll("circle")
+                //     .data(chartData)
+                //     .enter()
+                //     .append("circle")
+                //     .attr("r", 3.5)
+                //     .attr("cx", function (d) {
+                //         return x(d.date);
+                //     })
+                //     .attr("cy", function (d) {
+                //         return y(d.sz);
+                //     })
+                //     .style("fill", "rgb(214,39,40)");
 
 
             }
@@ -734,19 +757,19 @@ $(".stuff li > a").click( function() {
                     .duration(1000)
                     .attr("d", meanLine(chartData));
 
-                svg.selectAll("circle")
-                    .data(chartData)
-                    .transition()
-                    .duration(1000)
-                    .attr("r", 3.5)
-                    .attr("cx", function (d) {
-                        // console.log(d)
-                        return x(d.date);
-                    })
-                    .attr("cy", function (d) {
-                        return y(d.sz);
-                    })
-                    .style("fill", "rgb(214,39,40)");
+                // svg.selectAll("circle")
+                //     .data(chartData)
+                //     .transition()
+                //     .duration(1000)
+                //     .attr("r", 3.5)
+                //     .attr("cx", function (d) {
+                //         // console.log(d)
+                //         return x(d.date);
+                //     })
+                //     .attr("cy", function (d) {
+                //         return y(d.sz);
+                //     })
+                //     .style("fill", "rgb(214,39,40)");
           
 
          // Update X axis
