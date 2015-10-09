@@ -340,11 +340,17 @@ $(".stuff li > a").click( function() {
                 // console.log(scholLoc)
 
                 var projection = d3.geo.albers()
-                    .rotate([96, 5])
-                    .center([-32, 58.5])
-                    .parallels([20, 60])
+                    .rotate([126, -10])
+                    .center([7,44])
+                    .parallels([50, 58])
                     .scale(1970)
                     .translate([960 / 2, 600 / 2]);
+
+            //         .rotate([126, -10]) \
+            // .center([7,44]) \
+            // .parallels([50, 58]) \
+            // .scale(1970) \
+            // .translate([width / 2, height / 2])
 
                 g.append("g")
                     .attr("class", "bubble")

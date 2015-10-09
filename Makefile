@@ -42,11 +42,7 @@ census.json: build/subunits.json
 	    --simplify=0.05 \
 		-- census=$<
 
-#bs albers projection
-build/sd1.json: build/TA_SD_SVW/TA_SD_SVW_polygon.shp
-	ogr2ogr -f GeoJSON -t_srs "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs  " \
-	build/sd1.json \
-	build/TA_SD_SVW/TA_SD_SVW_polygon.shp
+
 
 # school districts
 build/sd.json: build/TA_SD_SVW/TA_SD_SVW_polygon.shp
@@ -54,31 +50,41 @@ build/sd.json: build/TA_SD_SVW/TA_SD_SVW_polygon.shp
 	build/sd.json \
 	build/TA_SD_SVW/TA_SD_SVW_polygon.shp
 
-skulldist.json: build/sd1.json
+
+#working version, not bc albers		
+skulldist.json: build/sd.json
 	node_modules/.bin/topojson \
-		--width 960 \
-	    --height 600 \
+		-o $@ \
+		--projection='width = 960, height = 600, d3.geo.albers() \
+			.rotate([126, -10]) \
+		    .center([7,44]) \
+		    .parallels([50, 58]) \
+		    .scale(1970) \
+		    .translate([width / 2, height / 2])' \
 	    --properties='zone=SD_NAME' \
 	    --properties='zoneNum=SD_NUM' \
 	    --simplify=0.05 \
-		-o $@ \
 		-- skulldist=$<
 
 
-#working version, not bc albers		
-# skulldist.json: build/sd.json
+
+#bs albers projection - works ###############
+# build/sd1.json: build/TA_SD_SVW/TA_SD_SVW_polygon.shp
+# 	ogr2ogr -f GeoJSON -t_srs "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs  " \
+# 	build/sd1.json \
+# 	build/TA_SD_SVW/TA_SD_SVW_polygon.shp
+
+# skulldist.json: build/sd1.json
 # 	node_modules/.bin/topojson \
-# 		-o $@ \
-# 		--projection='width = 960, height = 600, d3.geo.albers() \
-# 			.rotate([96, 5]) \
-# 		    .center([-32, 58.5]) \
-# 		    .parallels([20, 60]) \
-# 		    .scale(1970) \
-# 		    .translate([width / 2, height / 2])' \
+# 		--width 960 \
+# 	    --height 600 \
 # 	    --properties='zone=SD_NAME' \
 # 	    --properties='zoneNum=SD_NUM' \
 # 	    --simplify=0.05 \
+# 		-o $@ \
 # 		-- skulldist=$<
+###################################
+
 
 
 # Use BC Albers Projection
