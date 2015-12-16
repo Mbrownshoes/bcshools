@@ -143,10 +143,10 @@
 </style>
 
 <body>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-
+    <!-- <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
 <h1>BC Schools Class Size</h1>
 
 <!-- Single button -->
@@ -267,10 +267,10 @@ $(".stuff li > a").click( function() {
 
     function clicked(d) {
 
-        d3.select("#distid").style("visibility","visible")
-        .transition()
-            .delay(200)
-            .text(d.properties.zone);
+        // d3.select("#distid").style("visibility","visible")
+        // .transition()
+        //     .delay(200)
+        //     .text(d.properties.zone);
             // $("#distid").text(d.properties.zone);
 
  // var disttext = svg.append("text")
