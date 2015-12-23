@@ -272,14 +272,14 @@ $(".stuff li > a").click( function() {
             .text(d.properties.zone);
             $("#distid").text(d.properties.zone);
 
- var disttext = svg.append("text")
-            .transition()
-            .delay(200)
-            .attr("x", (width / 4))             
-            .attr("y", 0 - (margin.top / 2))
-            .attr("text-anchor", "middle")  
-            .style("font-size", "16px") 
-            .text(d.properties.zone);
+ // var disttext = svg.append("text")
+ //            .transition()
+ //            .delay(200)
+ //            .attr("x", (width / 4))             
+ //            .attr("y", 0 - (margin.top / 2))
+ //            .attr("text-anchor", "middle")  
+ //            .style("font-size", "16px") 
+ //            .text(d.properties.zone);
 
         currentDist = d;
         // console.log(currentDist)
