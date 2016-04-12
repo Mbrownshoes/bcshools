@@ -117,13 +117,15 @@
 
     #chart_container {
         position: absolute;
-        left:920px;
-        top:140px;
+        left:620px;
+        top:100px;
+        background-color: rgba(255,255,255,.7);
+
     }
 
     #grades{
-        left:950px;
-        top:360px;
+        left:650px;
+        top:320px;
 
     }
 
@@ -243,6 +245,8 @@ $(".stuff li > a").click( function() {
 
     d3.select("#grades").style("visibility","hidden")
     d3.select("#distid").style("visibility","hidden")
+    d3.select("#chart_container").style("visibility","hidden")
+    
 
     d3.json("skulldist.json", function(error, BC) {
         if (error) return console.error(error);
@@ -332,7 +336,7 @@ $(".stuff li > a").click( function() {
       
 
         $.ajax({
-            url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
+            url: 'https://catalogue.data.gov.bc.ca/api/3/action/datastore_search',
             data: data,
             success: function(data) {
                 scholLoc = data.result.records
@@ -377,6 +381,7 @@ $(".stuff li > a").click( function() {
                         return tooltip.style("visibility", "hidden");
                     })
                     .on("click", function(d) {
+                        d3.select("#chart_container").style("visibility","visible")
                         currentSchool = d;
                         // if first time make if second update chart
                         if (counter == 0){
@@ -444,7 +449,7 @@ $(".stuff li > a").click( function() {
         
 
         $.ajax({
-            url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
+            url: 'https://catalogue.data.gov.bc.ca/api/3/action/datastore_search',
             data: data,
             success: function(data) {
                 scholLoc = data.result.records
@@ -589,7 +594,7 @@ $(".stuff li > a").click( function() {
         };
 
         $.ajax({
-            url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
+            url: 'https://catalogue.data.gov.bc.ca/api/3/action/datastore_search',
             data: data,
             success: function(data) {
                 test = data
@@ -711,7 +716,7 @@ $(".stuff li > a").click( function() {
         };
 
         $.ajax({
-            url: 'https://uat-api.bcdevexchange.org/bcdc/action/datastore_search',
+            url: 'https://catalogue.data.gov.bc.ca/api/3/action/datastore_search',
             data: data,
             success: function(data) {
                 console.log(data)
@@ -730,9 +735,9 @@ $(".stuff li > a").click( function() {
                     return a.date - b.date;
                 });
 
-                // y.domain(d3.extent(chartData, function(d) {
-                //     return d.sz;
-                // }));
+                y.domain(d3.extent(chartData, function(d) {
+                    return d.sz;
+                }));
                 console.log(chartData)
 
                 x.domain(d3.extent(chartData, function(d) {
@@ -780,10 +785,11 @@ $(".stuff li > a").click( function() {
           
 
          // Update X axis
-            // svg.select(".y.axis")
-            //     .transition()
-            //     .duration(1000)
-            //     .call(yAxis);
+            svg.select(".y.axis")
+                .transition()
+                .duration(1000)
+                .call(yAxis);
+                
             d3.select("text")
             .attr("x", (width / 4))             
             .attr("y", 0 - (margin.top / 2.5))
